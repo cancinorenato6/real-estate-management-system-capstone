@@ -1,0 +1,254 @@
+.hero {
+    background: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?fit=crop&w=1500&q=80') center/cover no-repeat;
+    /* padding: 6rem 2rem; */
+    padding: 15%;
+    text-align: center;
+    color: white;
+    position: relative;
+  }
+  .hero::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: rgba(14, 42, 42, 0.7);
+  }
+  .hero-content {
+    position: relative;
+    z-index: 1;
+  }
+  .hero h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+  }
+  .hero p {
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
+  }
+  .search-bar input, .search-bar select {
+    padding: 0.5rem;
+    margin: 0.5rem;
+    width: 200px;
+  }
+  .search-bar button {
+    background-color: #D76445;
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+  }
+  .section {
+    padding: 4rem 2rem;
+    text-align: center;
+  }
+
+  .property-card {
+    display: inline-block;
+    width: 280px;
+    margin: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .property-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+  }
+  .property-card .info {
+    padding: 1rem;
+    text-align: left;
+  }
+  .property-card button {
+    background-color: #0E2A2A;
+    color: white;
+    padding: 0.4rem 0.8rem;
+    border: none;
+    margin-top: 0.5rem;
+  }
+
+  .why-choose-us-section {
+    padding: 50px 20px;
+    background-color: #fafafa;
+    text-align: center;
+    margin-top: 0; /* Adjust this value if needed */
+    margin-bottom: 30px; /* Space between this section and the next */
+}
+
+.section-title {
+    color: #2c3e50;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    
+}
+
+.section-subtitle {
+    max-width: 800px;
+    margin: 0 auto 40px;
+    color: #5a5a5a;
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
+
+.features-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.feature-card {
+    background-color: white;
+    border-radius: 8px;
+    padding: 25px 20px;
+    width: 220px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.feature-card h3 {
+    color: #2c3e50;
+    font-size: 1.3rem;
+    margin-bottom: 12px;
+}
+
+.feature-card p {
+    color: #5a5a5a;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+    .features-container {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .feature-card {
+        width: 80%;
+        max-width: 300px;
+    }
+}
+
+#map {
+    height: 500px;
+    width: 100%;
+    z-index: 1;
+    margin: 20px 0;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+@media (max-width: 768px) {
+    #map {
+        height: 350px;
+    }
+}
+  .contact {
+    background-color: #0E2A2A;
+    color: white;
+    padding: 40px 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.contact-container {
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 1200px;
+    margin: 0 auto;
+    justify-content: space-between;
+}
+
+.contact-column {
+    flex: 1;
+    min-width: 250px;
+    padding: 0 20px;
+    margin-bottom: 30px;
+}
+
+.contact h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-weight: 500;
+}
+
+.social-links {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.social-links a {
+    color: white;
+    text-decoration: none;
+    transition: opacity 0.3s;
+}
+
+.social-links a:hover {
+    opacity: 0.8;
+}
+
+.copyright {
+    margin-top: 30px;
+    font-size: 0.9em;
+    opacity: 0.8;
+}
+
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.form-row {
+    display: flex;
+    gap: 10px;
+}
+
+.form-row input {
+    flex: 1;
+}
+
+.contact-form input, 
+.contact-form textarea {
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.send-message {
+    background-color: #D76445;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    width: fit-content;
+    margin-top: 5px;
+    transition: background-color 0.3s;
+}
+
+.send-message:hover {
+    background-color: #E76F51;
+}
+
+/* Make it responsive */
+@media (max-width: 768px) {
+    .contact-container {
+        flex-direction: column;
+    }
+    
+    .form-row {
+        flex-direction: column;
+    }
+}
