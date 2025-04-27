@@ -30,32 +30,37 @@
     </style>
 </head>
 <body>
-    @if (session('must_logout'))
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    {{-- @if (session('must_logout'))
     <script>
-        Swal.fire({
-            icon: 'warning',
-            title: 'Access Denied',
-            text: "{{ session('must_logout') }}",
-            confirmButtonText: 'OK',    
-        });
+        alert("{{ session('must_logout') }}");
     </script>
-    @endif   
+@endif --}}
+@if (session('must_logout'))
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    Swal.fire({
+        icon: 'warning',
+        title: 'Access Denied',
+        text: "{{ session('must_logout') }}",
+        confirmButtonText: 'OK'
+    });
+</script>
+@endif
     <div class="d-flex">
         <!-- Sidebar -->
         <div class="sidebar p-4">
             <div class="d-flex flex-column align-items-center mb-4">
-                <i class="fas fa-handshake fa-7x logo mb-1"></i>
-                <h4 class="m-0" style="font-size: 32px">Client</h4>
+                <i class="fas fa-desktop fa-7x logo mb-1"></i>
+                <h4 class="m-0" style="font-size: 32px">Admin</h4>
             </div>
             <nav class="nav flex-column">
-                <a class="nav-link" href="{{route('clientsProfile')}}"><i class="fas fa-user me-2"></i> Profile</a>
-                <a class="nav-link" href="{{route('clientsListings')}}"><i class="fas fa-list me-2"></i> Listings</a>
-                <a class="nav-link" href="{{route('favorites')}}"><i class="fas fa-heart me-2"></i> Favorites</a>
+                <a class="nav-link" href="{{route('agentDashboard')}}"><i class="fas fa-user me-2"></i>Dashboard</a>
+                <a class="nav-link" href="#"><i class="fas fa-list me-2"></i> Listings</a>
+                <a class="nav-link" href="#"><i class="fas fa-heart me-2"></i> Favorites</a>
                 <a class="nav-link" href="{{route('maps')}}"><i class="fas fa-map-marked-alt me-2"></i> Map</a>
-                <a class="nav-link" href="{{route('messages')}}"><i class="fas fa-envelope me-2"></i> Messages</a>
-                <a class="nav-link" href="{{route('myProperty')}}"><i class="fas fa-home me-2"></i> My Property</a>
-                <a class="nav-link" href="#"
+                <a class="nav-link" href="#"><i class="fas fa-envelope me-2"></i> Messages</a>
+                <a class="nav-link" href="#"><i class="fas fa-home me-2"></i> My Property</a>
+                <a class="nav-link" href="{{ route('logout') }}"
                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                    <i class="fas fa-sign-out-alt me-2"></i> Logout
                 </a>

@@ -17,6 +17,23 @@
     <link rel="stylesheet" href="{{ asset('css/register.css') }}">
 </head>
 <body>
+    @if ($errors->any())
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Registration Failed',
+            html: `{!! implode('<br>', $errors->all()) !!}`,
+            position: 'top-end', // Upper right
+            toast: true,         // Makes it a small toast style
+            showConfirmButton: false,
+            timer: 5000,          // Auto close after 5 seconds
+            timerProgressBar: true,
+            width: '400px',       // Adjust size
+        });
+    </script>
+@endif
+
     <div class="registration-container">
         <div class="image-section" style="background-image: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?fit=crop&w=1500&q=80');"></div>
         <div class="form-section">

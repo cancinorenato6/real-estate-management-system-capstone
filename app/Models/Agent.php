@@ -16,6 +16,8 @@ class Agent extends Authenticatable
         'name',
         'age',
         'birthday',
+        'contactno',  
+        'address', 
         'email',
         'profile_pic',
         'username',

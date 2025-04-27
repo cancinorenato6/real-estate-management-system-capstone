@@ -11,4 +11,8 @@ class AdminModuleController extends Controller
         $admin = Auth::guard('admin')->user();
         return view('admin.adminDashboard', ['admin' => $admin]);
     }
+    public function adminAgents(){
+        $admin = Auth::guard('admin')->user();
+        return view('admin.adminAgents', ['admin' => $admin]);
+    }
 }

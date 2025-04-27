@@ -30,6 +30,22 @@
     </style>
 </head>
 <body>
+    {{-- @if (session('must_logout'))
+    <script>
+        alert("{{ session('must_logout') }}");
+    </script>
+@endif --}}
+@if (session('must_logout'))
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    Swal.fire({
+        icon: 'warning',
+        title: 'Access Denied',
+        text: "{{ session('must_logout') }}",
+        confirmButtonText: 'OK'
+    });
+</script>
+@endif
     <div class="d-flex">
         <!-- Sidebar -->
         <div class="sidebar p-4">
@@ -38,7 +54,8 @@
                 <h4 class="m-0" style="font-size: 32px">Admin</h4>
             </div>
             <nav class="nav flex-column">
-                <a class="nav-link" href="{{route('adminDashboard')}}"><i class="fas fa-user me-2"></i>Dashboard</a>
+                <a class="nav-link" href="{{route('adminDashboard')}}"><i class="fas fa-user me-2"></i> Dashboard</a>
+                <a class="nav-link" href="{{route('adminAgents')}}"><i class="fas fa-users me-2"></i> Agents</a>
                 <a class="nav-link" href="#"><i class="fas fa-list me-2"></i> Listings</a>
                 <a class="nav-link" href="#"><i class="fas fa-heart me-2"></i> Favorites</a>
                 <a class="nav-link" href="{{route('maps')}}"><i class="fas fa-map-marked-alt me-2"></i> Map</a>

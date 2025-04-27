@@ -57,6 +57,8 @@ class AuthController extends Controller
             'name' => 'required|string|max:55',
             'age' => 'required|integer|min:18|max:99',
             'birthday' => 'required|date',
+            'contactno' => 'required|string|max:15',
+            'address' => 'required|string|max:255',
             'email' => 'required|email|unique:agents,email',
             'username' => 'required|string|min:4|max:55|unique:agents,username',
             'password' => 'required|string|min:8|confirmed',
@@ -90,6 +92,7 @@ class AuthController extends Controller
         $admin = Admin::where('username', $credentials['username'])->first();
         if ($admin && Hash::check($credentials['password'], $admin->password)) {
             Auth::guard('admin')->login($admin);
+            $request->session()->regenerate();
             return redirect()->route('adminDashboard');
         }// Change this route as needed
 
@@ -97,6 +100,7 @@ class AuthController extends Controller
         if ($agent && Hash::check($credentials['password'], $agent->password)) {
          
             Auth::guard('agent')->login($agent);
+            $request->session()->regenerate();
             return redirect()->route('agentDashboard');
         }
 
@@ -104,6 +108,7 @@ class AuthController extends Controller
         if ($client && Hash::check($credentials['password'], $client->password)) {
             // Use the 'client' guard to login
             Auth::guard('client')->login($client);
+            $request->session()->regenerate();
             return redirect()->route('clientsProfile');
         }
 

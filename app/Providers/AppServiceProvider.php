@@ -3,6 +3,10 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Routing\MiddlewareNameResolver; // Just in case
+use App\Http\Middleware\GuestWithAlert;
+use App\Http\Middleware\GuestAlertClientMW;
+use App\Http\Middleware\GuestAlertAdminMW;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,6 +23,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        
     }
 }

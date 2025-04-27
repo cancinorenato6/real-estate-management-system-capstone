@@ -12,7 +12,7 @@ class ClientsModuleController extends Controller
         return view('clients.clientsProfile', ['client' => $client]);
     }
 
-    public function listings(){
+    public function clientsListings(){
         $client = Auth::guard('client')->user();
         return view('clients.clientsListings', ['client' => $client]);
     }
