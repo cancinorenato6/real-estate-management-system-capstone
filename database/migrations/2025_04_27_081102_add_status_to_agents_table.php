@@ -9,13 +9,20 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    
-    
+    public function up(): void
+    {
+         Schema::table('agents', function (Blueprint $table) {
+        $table->boolean('status')->default(1)->after('profile_pic');
+    });
+}
+
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('agents');
+        Schema::table('agents', function (Blueprint $table) {
+            $table->dropColumn('status');
+        });
     }
 };

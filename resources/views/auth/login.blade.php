@@ -5,6 +5,23 @@
 @section('Content')
 
 <link rel="stylesheet" href="{{ asset ('css/login.css')}}">
+@if (session('success'))
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Success!',
+            text: '{{ session('success') }}',
+            position: 'top-end',
+            toast: true,
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            width: '300px',
+        });
+    </script>
+@endif
+
 <div class="login-container">
     <div class="image-section" style="background-image: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?fit=crop&w=1500&q=80');"></div>
     <div class="form-section">

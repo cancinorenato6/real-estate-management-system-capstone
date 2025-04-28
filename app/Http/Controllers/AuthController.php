@@ -43,44 +43,12 @@ class AuthController extends Controller
         ]);
 
         
-        Auth::guard('client')->login($client);
-        
-
+        // Auth::guard('client')->login($client);
 
         return redirect()->route('show.login')->with('success', 'Registration successful!');
     }
 
-    public function registerAgent(Request $request)
-    {
-        $validated = $request->validate([
-            'prc_id' => 'required|string|max:55|unique:agents,prc_id',
-            'name' => 'required|string|max:55',
-            'age' => 'required|integer|min:18|max:99',
-            'birthday' => 'required|date',
-            'contactno' => 'required|string|max:15',
-            'address' => 'required|string|max:255',
-            'email' => 'required|email|unique:agents,email',
-            'username' => 'required|string|min:4|max:55|unique:agents,username',
-            'password' => 'required|string|min:8|confirmed',
-            'profile_pic' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-        ]);
-
-        $agent = Agent::create([
-            'prc_id' => $validated['prc_id'],
-            'name' => $validated['name'],
-            'age' => $validated['age'],
-            'birthday' => $validated['birthday'],
-            'email' => $validated['email'],
-            'username' => $validated['username'],
-            'password' => bcrypt($validated['password']),
-            'profile_pic' => $validated['profile_pic'],
-        ]);
-
-        Auth::guard('agent')->login($agent);
-
-        return redirect()->route('agent.dashboard')->with('success', 'Agent registered and logged in!');
-    }
-
+    
 
     public function login(Request $request)
     {

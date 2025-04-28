@@ -6,8 +6,7 @@ use App\Http\Controllers\AdminModuleController;
 use App\Http\Controllers\AgentModuleController;
 use App\Http\Controllers\PagesController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Middleware\GuestAlertAdminMW;
-use App\Http\Middleware\GuestAlertClientMW;
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -30,11 +29,16 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 // Admin views
 Route::middleware(['auth:admin'])->group(function () {
     Route::get('/adminDashboard', [AdminModuleController::class, 'adminDashboard'])->name('adminDashboard');
+    
     Route::get('/adminAgents', [AdminModuleController::class, 'adminAgents'])->name('adminAgents');
+    Route::get('/agentsCreate', [AdminModuleController::class, 'agentsCreate'])->name('agentsCreate');
+    Route::post('/agentsRegister', [AdminModuleController::class, 'agentsRegister'])->name('agentsRegister');
+    Route::get('/deactivateAgent/{id}', [AdminModuleController::class, 'deactivateAgent'])->name('deactivateAgent');
+    Route::get('viewAgent/{id}', [AdminModuleController::class, 'viewAgent'])->name('viewAgent');
 });
 
 
-Route::middleware(['guestwithalert:admin', 'guestwithalert:client'])->group(function () {
+Route::middleware(['guestwithalert:admin', 'guestwithalert:client', 'guestwithalert:agent'])->group(function () {
     Route::get('/register', [AuthController::class, 'showRegister'])->name('show.register');
     Route::get('/login', [AuthController::class, 'showLogin'])->name('show.login');
     Route::post('/register', [AuthController::class, 'register'])->name('register');
@@ -49,7 +53,6 @@ Route::middleware(['guestwithalert:admin', 'guestwithalert:client'])->group(func
 // Agent views
 Route::middleware(['auth:agent'])->group(function () {
     Route::get('/agentDashboard', [AgentModuleController::class, 'agentDashboard'])->name('agentDashboard');
-    // add more agent pages here
 });
 
 // Client views

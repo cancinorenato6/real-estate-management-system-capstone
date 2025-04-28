@@ -8,7 +8,8 @@ class AgentModuleController extends Controller
 {
     public function agentDashboard(){
         $agent = Auth::guard('agent')->user();
-        return view('agent.agentDashboard', ['agent' => $agent]);
+        return view('agents.agentDashboard', ['agent' => $agent]);
     }
+
 }
 

@@ -33,7 +33,7 @@
  @section('Content')
      <div>
          @auth('client')
-             <h1 class="h3 mb-2">Welcome, {{ Auth::guard('client')->user()->first_name }}!</h1>
+             <h1 class="h3 mb-2">Welcome, {{ Auth::guard('client')->user()->first_name,}} {{ Auth::guard('client')->user()->last_name }}</h1>
              <p class="text-success">Client is logged in.</p>
          @else
              <p class="text-danger">No client is logged in.</p>

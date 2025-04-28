@@ -50,8 +50,8 @@
         <!-- Sidebar -->
         <div class="sidebar p-4">
             <div class="d-flex flex-column align-items-center mb-4">
-                <i class="fas fa-desktop fa-7x logo mb-1"></i>
-                <h4 class="m-0" style="font-size: 32px">Admin</h4>
+                {{-- <i class="fas fa-desktop fa-7x logo mb-1"></i> --}}
+                <h4 class="m-0" style="font-size: 32px">Canaanland</h4>
             </div>
             <nav class="nav flex-column">
                 <a class="nav-link" href="{{route('agentDashboard')}}"><i class="fas fa-user me-2"></i>Dashboard</a>
