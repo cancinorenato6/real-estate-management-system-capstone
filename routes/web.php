@@ -17,6 +17,9 @@ Route::get('/', [PagesController::class, 'Home'])->name('home');
 Route::get('/listings', [PagesController::class, 'Listings'])->name('listings');
 Route::get('/services', [PagesController::class, 'Services'])->name('services');
 Route::get('/about', [PagesController::class, 'About'])->name('about');
+Route::get('/pubViewProperties/{id}', [PagesController::class, 'pubViewProperties'])->name('pubViewProperties');
+
+
 
 // Auth Routes
 Route::get('/login', [AuthController::class, 'showLogin'])->name('show.login');
@@ -34,7 +37,7 @@ Route::middleware(['auth:admin'])->group(function () {
     Route::get('/agentsCreate', [AdminModuleController::class, 'agentsCreate'])->name('agentsCreate');
     Route::post('/agentsRegister', [AdminModuleController::class, 'agentsRegister'])->name('agentsRegister');
     Route::get('/deactivateAgent/{id}', [AdminModuleController::class, 'deactivateAgent'])->name('deactivateAgent');
-    Route::get('viewAgent/{id}', [AdminModuleController::class, 'viewAgent'])->name('viewAgent');
+    Route::get('/viewAgent/{id}', [AdminModuleController::class, 'viewAgent'])->name('viewAgent');
 });
 
 
@@ -57,6 +60,12 @@ Route::middleware(['auth:agent'])->group(function () {
     Route::get('/agentProperties', [AgentModuleController::class, 'agentProperties'])->name('agentProperties');
     Route::get('/createProperty', [AgentModuleController::class, 'createProperty'])->name('createProperty');
     Route::post('/storeProperty', [AgentModuleController::class, 'storeProperty'])->name('storeProperty');
+    Route::get('/agentProperties/{id}', [AgentModuleController::class, 'viewProperties'])->name('viewProperties');
+    Route::get('/editProperty/{id}', [AgentModuleController::class, 'editProperty'])->name('editProperty');
+    Route::put('/updateProperty/{id}', [AgentModuleController::class, 'updateProperty'])->name('updateProperty');
+
+
+
 
 });
 

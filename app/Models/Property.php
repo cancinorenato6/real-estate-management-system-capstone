@@ -27,8 +27,10 @@ class Property extends Model
         'images' => 'array', // Automatically cast images JSON to array
     ];
 
-    public function agent()
-{
-    return $this->belongsTo(Agent::class);
-}
+        public function agent()
+    {
+        return $this->belongsTo(Agent::class);
+    }
+
+
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 Use App\Models\Property;
+use App\Models\PropertyImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -66,6 +67,7 @@ class AgentModuleController extends Controller
 
     public function editProperty($id){
         $property = Property::findOrFail($id);
+
         return view('agents.editProperty', compact('property'));
     }
 
@@ -105,6 +107,8 @@ class AgentModuleController extends Controller
             'images' => $imagePaths,
         ]);
 
+        $property->save();
+
         return redirect()->route('agentProperties')->with('success', 'Property updated successfully.');
     }
 
@@ -120,8 +124,16 @@ class AgentModuleController extends Controller
 
         $property->delete();
 
-        return redirect()->route('agentProperties')->with('success', 'Property deleted successfully.');
+        return redirect()->route('agents.agentProperties')->with('success', 'Property deleted successfully.');
     }
+
+    public function viewProperties($id)
+{
+    $property = Property::with('agent')->findOrFail($id);
+    return view('agents.viewProperties', compact('property'));
+}
+
+
 
 }
 
