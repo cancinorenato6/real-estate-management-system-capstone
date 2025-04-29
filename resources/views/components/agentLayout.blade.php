@@ -54,12 +54,14 @@
                 <h4 class="m-0" style="font-size: 32px">Canaanland</h4>
             </div>
             <nav class="nav flex-column">
-                <a class="nav-link" href="{{route('agentDashboard')}}"><i class="fas fa-user me-2"></i>Dashboard</a>
-                <a class="nav-link" href="#"><i class="fas fa-list me-2"></i> Listings</a>
-                <a class="nav-link" href="#"><i class="fas fa-heart me-2"></i> Favorites</a>
-                <a class="nav-link" href="{{route('maps')}}"><i class="fas fa-map-marked-alt me-2"></i> Map</a>
+                <a class="nav-link" href="{{route('agentDashboard')}}"><i class="fas fa-chart-line me-2"></i>Dashboard</a>
+                <a class="nav-link" href="#"><i class="fas fa-user-cog me-2"></i> My Account</a>
                 <a class="nav-link" href="#"><i class="fas fa-envelope me-2"></i> Messages</a>
-                <a class="nav-link" href="#"><i class="fas fa-home me-2"></i> My Property</a>
+                <a class="nav-link" href="#"><i class="fas fa-users me-2"></i> Client</a>
+                <a class="nav-link" href="{{route('agentProperties')}}"><i class="fas fa-building me-2"></i> Properties</a>
+                <a class="nav-link" href="#"><i class="fas fa-folder me-2"></i> Archived Properties</a>
+                <a class="nav-link" href="{{route('maps')}}"><i class="fas fa-map-marked-alt me-2"></i> Maps</a>
+                <hr>
                 <a class="nav-link" href="{{ route('logout') }}"
                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                    <i class="fas fa-sign-out-alt me-2"></i> Logout

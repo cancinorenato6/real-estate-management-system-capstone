@@ -53,6 +53,11 @@ Route::middleware(['guestwithalert:admin', 'guestwithalert:client', 'guestwithal
 // Agent views
 Route::middleware(['auth:agent'])->group(function () {
     Route::get('/agentDashboard', [AgentModuleController::class, 'agentDashboard'])->name('agentDashboard');
+
+    Route::get('/agentProperties', [AgentModuleController::class, 'agentProperties'])->name('agentProperties');
+    Route::get('/createProperty', [AgentModuleController::class, 'createProperty'])->name('createProperty');
+    Route::post('/storeProperty', [AgentModuleController::class, 'storeProperty'])->name('storeProperty');
+
 });
 
 // Client views
