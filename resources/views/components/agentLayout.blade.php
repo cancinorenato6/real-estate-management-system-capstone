@@ -59,8 +59,9 @@
                 <a class="nav-link" href="#"><i class="fas fa-envelope me-2"></i> Messages</a>
                 <a class="nav-link" href="#"><i class="fas fa-users me-2"></i> Client</a>
                 <a class="nav-link" href="{{route('agentProperties')}}"><i class="fas fa-building me-2"></i> Properties</a>
-                <a class="nav-link" href="#"><i class="fas fa-folder me-2"></i> Archived Properties</a>
-                <a class="nav-link" href="{{route('maps')}}"><i class="fas fa-map-marked-alt me-2"></i> Maps</a>
+                <a class="nav-link" href="{{route('agentSoldProperties')}}"><i class="fas fa-building me-2"></i> Sold Properties</a>
+                <a class="nav-link" href="{{route("agentArchiveProperties")}}"><i class="fas fa-folder me-2"></i> Archived Properties</a>
+                <a class="nav-link" href="#"><i class="fas fa-map-marked-alt me-2"></i> Maps</a>
                 <hr>
                 <a class="nav-link" href="{{ route('logout') }}"
                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">

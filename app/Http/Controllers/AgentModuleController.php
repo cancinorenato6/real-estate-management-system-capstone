@@ -133,6 +133,15 @@ class AgentModuleController extends Controller
     return view('agents.viewProperties', compact('property'));
 }
 
+    public function agentSoldProperties(){
+        $agent = Auth::guard('agent')->user();
+        return view('agents.agentSoldProperties', ['agent' => $agent]);
+    }
+    public function agentArchiveProperties(){
+        $agent = Auth::guard('agent')->user();
+        return view('agents.agentArchiveProperties', ['agent' => $agent]);
+    }
+    
 
 
 }

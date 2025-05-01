@@ -71,8 +71,10 @@
                             📍 {{ $property->barangay }}, {{ $property->city }}, {{ $property->province }}
                         </p>
                         <a href="{{ route('viewProperties', $property->id) }}" class="btn btn-outline-primary btn-sm">View Post</a>
+                        <a href="#" class="btn btn-outline-primary btn-sm">Archive</a>
+                        <a href="#" class="btn btn-outline-primary btn-sm">Sold</a>
                     </div>
-                </div>
+                </div>  
             </div>
         @empty
             <p>No properties found.</p>

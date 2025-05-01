@@ -32,5 +32,4 @@ class Property extends Model
         return $this->belongsTo(Agent::class);
     }
 
-
 }

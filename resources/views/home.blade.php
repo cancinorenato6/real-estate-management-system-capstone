@@ -9,8 +9,6 @@
 <link rel="stylesheet" href="{{ asset('css/home.css') }}">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
-
-
 <div id="home" class="hero">
     <div class="hero-content">
       <h1>Find Your Dream Home with Canaanland</h1>
@@ -18,53 +16,62 @@
       <div class="search-bar">
         <input type="text" placeholder="Location">
         <select>
-          <option>Property Type</option>
-          <option>House</option>
-          <option>Lot</option>
-          <option>Appartment</option>
-          <option>Commercial Space</option>
+         <option disabled selected hidden>Property Type</option>
+         <option>Any</option>
+         <option>Condominium</option>
+         <option>Commercial Space</option>
+         <option>Apartment</option>
+         <option>Houes</option>
+         <option>Land</option>
         </select>
-        <input type="text" placeholder="Price Range">
+        <input type="text" placeholder="Max Price">
         <button>Search</button>
       </div>
     </div>
 </div>
-
 <div id="listings" class="section">
     <h2 style="color: #2c3e50">Listings in La Union!</h2>
-    <div class="property-card">
-      <img src="{{ asset('img/testhouse1.png') }}" alt="Property 1">
-      <div class="info">
-        <h3>3BR House in San Carlos</h3>
-        <p>₱3,500,000</p>
-        <p>Specs</p>
-        <p>Location</p>
-        <button>View Details</button>
-      </div>
-    </div>
+    <br>
+    <div class="row">
+        @forelse($properties as $property)
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 shadow-sm">
+                    <!-- Agent Info -->
+                    <div class="d-flex align-items-center p-2 bg-light border-bottom">
+                        <img src="{{ $property->agent->profile_pic ? asset('storage/' . $property->agent->profile_pic) : asset('img/agentDefaultProfile.jpg') }}"
+                             alt="Agent profile"
+                             class="rounded-circle me-2"
+                             width="40" height="40"
+                             style="object-fit: cover;">
+                        <div>
+                            <strong class="d-block" style="font-size: 0.9rem;">{{ $property->agent->name }}</strong>
+                            <small class="text-muted">{{ \Carbon\Carbon::parse($property->created_at)->format('m/d/y') }}</small>
+                        </div>
+                    </div>
 
-    <div class="property-card">
-      <img src="{{ asset('img/testhouse1.png') }}" alt="Property 2">
-      <div class="info">
-        <h3>Modern Apartment</h3>
-        <p>₱2,800,000</p>
-        <p>Specs</p>
-        <p>Location</p>
-        <button>View Details</button>
-      </div>
-    </div>
+                    <!-- Property Image -->
+                    @if(!empty($property->images) && is_array($property->images))
+                        <img src="{{ asset('storage/' . $property->images[0]) }}" class="card-img-top" style="height: 200px; object-fit: cover;">
+                    @endif
 
-    <div class="property-card">
-        <img src="{{ asset('img/testhouse1.png') }}" alt="Property 3">
-        <div class="info">
-          <h3>Modern Apartment</h3>
-          <p>₱2,800,000</p>
-          <p>Specs</p>
-          <p>Location</p>
-          <button>View Details</button>
-        </div>
-      </div>
-  </div> 
+                    <!-- Property Details -->
+                    <div class="card-body d-flex flex-column justify-content-between">
+                        <div>
+                            <h5 class="card-title text-success">{{ strtoupper($property->title) }}</h5>
+                            <p class="card-text mb-2">
+                                <strong>₱{{ number_format($property->price, 2) }}</strong><br>
+                                {{ ucfirst($property->offer_type) }} | {{ ucfirst($property->property_type) }}<br>
+                                📍 {{ $property->barangay }}, {{ $property->city }}, {{ $property->province }}
+                            </p>
+                        </div>
+                        <a href="{{ route('pubViewProperties', $property->id) }}" class="btn btn-outline-primary btn-sm mt-auto">View Details</a>
+                    </div>
+                </div>
+            </div>
+        @empty
+            <p class="text-center">No properties available at the moment.</p>
+        @endforelse
+    </div>
 </div>
 
 <div class="section">
@@ -142,7 +149,7 @@
 </div>
 
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+{{-- <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         // Initialize the map - set coordinates to La Union, Philippines
@@ -174,5 +181,34 @@
         alert('Viewing property #' + propertyId);
         // Or use: window.location.href = '/property/' + propertyId;
     }
+</script> --}}
+<script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const map = L.map('map').setView([16.6162, 120.3172], 12); // Centered on San Carlos City, La Union
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        const properties = @json($properties);
+
+        properties.forEach(property => {
+            if (property.latitude && property.longitude) {
+                const popupContent = `
+                    <b>${property.title}</b><br>
+                    ₱${parseFloat(property.price).toLocaleString()}<br>
+                    <button onclick="window.location.href='/property/${property.id}'">View Details</button>
+                `;
+                L.marker([property.latitude, property.longitude]).addTo(map)
+                    .bindPopup(popupContent);
+            }
+        });
+    });
 </script>
+
 @endsection

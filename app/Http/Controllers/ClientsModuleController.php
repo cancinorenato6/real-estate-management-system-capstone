@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+Use App\Models\Property;
+Use App\Models\Client;
 
 class ClientsModuleController extends Controller
 {
@@ -36,4 +38,5 @@ class ClientsModuleController extends Controller
         $client = Auth::guard('client')->user();
         return view('clients.clientsMyProperty', ['client' => $client]);
     }
+
 }

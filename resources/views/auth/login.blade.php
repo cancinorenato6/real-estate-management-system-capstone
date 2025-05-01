@@ -22,6 +22,22 @@
     </script>
 @endif
 
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+@if(request()->has('login_required'))
+    Swal.fire({
+        toast: true,
+        position: 'top-end',
+        icon: 'warning',
+        title: 'You must login first',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true
+    });
+@endif
+</script>
+@endpush
 <div class="login-container">
     <div class="image-section" style="background-image: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?fit=crop&w=1500&q=80');"></div>
     <div class="form-section">

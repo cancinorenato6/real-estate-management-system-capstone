@@ -21,6 +21,10 @@ Route::get('/pubViewProperties/{id}', [PagesController::class, 'pubViewPropertie
 
 
 
+
+
+
+
 // Auth Routes
 Route::get('/login', [AuthController::class, 'showLogin'])->name('show.login');
 Route::post('/login', [AuthController::class, 'login'])->name('login');
@@ -63,6 +67,8 @@ Route::middleware(['auth:agent'])->group(function () {
     Route::get('/agentProperties/{id}', [AgentModuleController::class, 'viewProperties'])->name('viewProperties');
     Route::get('/editProperty/{id}', [AgentModuleController::class, 'editProperty'])->name('editProperty');
     Route::put('/updateProperty/{id}', [AgentModuleController::class, 'updateProperty'])->name('updateProperty');
+    Route::get('/agentSoldProperties', [AgentModuleController::class, 'agentSoldProperties'])->name('agentSoldProperties');
+    Route::get('/agentArchiveProperties', [AgentModuleController::class, 'agentArchiveProperties'])->name('agentArchiveProperties');
 
 
 
