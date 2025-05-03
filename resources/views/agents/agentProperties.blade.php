@@ -7,33 +7,19 @@
 @if(session('success'))
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        Swal.fire({
-            toast: true,
-            position: 'top-end',
-            icon: 'success',
-            title: '{{ session('success') }}',
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: true
+        document.addEventListener('DOMContentLoaded', function () {
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: 'success',
+                title: '{{ session('success') }}',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true
+            });
         });
     </script>
 @endif
-
-@if(session('success'))
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-        Swal.fire({
-            toast: true,
-            position: 'top-end',
-            icon: 'success',
-            title: '{{ session('success') }}',
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: true
-        });
-    </script>
-@endif
-
 
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
@@ -45,7 +31,7 @@
         @forelse($properties as $property)
             <div class="col-md-4 mb-4">
                 <div class="card h-100">
-                    <!-- Agent Info inside the card -->
+                    <!-- Agent Info -->
                     <div class="d-flex align-items-center p-3 bg-light border-bottom">
                         <img src="{{ $property->agent->profile_pic ? asset('storage/' . $property->agent->profile_pic) : asset('img/agentDefaultProfile.jpg') }}"
                              alt="Agent profile"
@@ -71,7 +57,12 @@
                             📍 {{ $property->barangay }}, {{ $property->city }}, {{ $property->province }}
                         </p>
                         <a href="{{ route('viewProperties', $property->id) }}" class="btn btn-outline-primary btn-sm">View Post</a>
-                        <a href="#" class="btn btn-outline-primary btn-sm">Archive</a>
+
+                        <form action="{{ route('property.archive', $property->id) }}" method="POST" class="d-inline archive-form">
+                            @csrf
+                            <button type="button" class="btn btn-outline-primary btn-sm archive-btn">Archive</button>
+                        </form>
+
                         <a href="#" class="btn btn-outline-primary btn-sm">Sold</a>
                     </div>
                 </div>  
@@ -81,6 +72,31 @@
         @endforelse
     </div>
 </div>
-
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.archive-btn').forEach(button => {
+            button.addEventListener('click', function () {
+                const form = this.closest('.archive-form');
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "This property will be archived!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, archive it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            });
+        });
+    });
+</script>
 @endsection
+
+
+
+

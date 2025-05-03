@@ -15,12 +15,23 @@ class AgentModuleController extends Controller
         return view('agents.agentDashboard', ['agent' => $agent]);
     }
 
-    public function agentProperties(){
+    // public function agentProperties(){
+    //     $agent = Auth::guard('agent')->user();
+    //     $properties = Property::where('agent_id', $agent->id)->with('agent')->get();
+        
+    //     // return view('agents.agentProperties', ['agent' => $agent]);
+    //     return view('agents.agentProperties', compact('properties'));
+    // }
+
+    public function agentProperties() {
         $agent = Auth::guard('agent')->user();
-        $properties = Property::where('agent_id', $agent->id)->with('agent')->get();
-        // return view('agents.agentProperties', ['agent' => $agent]);
+        $properties = Property::where('agent_id', $agent->id)
+                              ->where('archived', false)
+                              ->get();
+    
         return view('agents.agentProperties', compact('properties'));
     }
+    
 
     public function createProperty(){
         return view('agents.createProperty');
@@ -137,10 +148,53 @@ class AgentModuleController extends Controller
         $agent = Auth::guard('agent')->user();
         return view('agents.agentSoldProperties', ['agent' => $agent]);
     }
-    public function agentArchiveProperties(){
-        $agent = Auth::guard('agent')->user();
-        return view('agents.agentArchiveProperties', ['agent' => $agent]);
+    // public function agentArchiveProperties(){
+    //     $agent = Auth::guard('agent')->user();
+    //     return view('agents.agentArchiveProperties', ['agent' => $agent]);
+    // }
+
+    public function archive($id) {
+        $property = Property::findOrFail($id);
+        
+        // Check if the authenticated agent owns the property
+        if ($property->agent_id != Auth::guard('agent')->id()) {
+            abort(403); // unauthorized
+        }
+    
+        $property->archived = true;
+        $property->save();
+    
+        return redirect()->back()->with('success', 'Property archived successfully!');
     }
+
+    public function agentArchiveProperties() {
+        $agent = Auth::guard('agent')->user();
+        $archivedProperties = Property::where('agent_id', $agent->id)
+                                      ->where('archived', true)
+                                      ->get();
+    
+        return view('agents.agentArchiveProperties', compact('archivedProperties'));
+    }
+
+        public function restoreProperty($id)
+    {
+        $property = Property::findOrFail($id);
+
+        if ($property->archived) {
+            $property->archived = false;
+            $property->save();
+
+            return redirect()->back()->with('success', 'Property restored successfully.');
+        }
+
+        return redirect()->back()->with('error', 'Property is not archived.');
+    }
+
+    
+    
+
+
+
     
 
 

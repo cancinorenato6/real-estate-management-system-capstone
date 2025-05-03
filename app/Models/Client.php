@@ -2,9 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Property;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use App\Models\Property;
+
+
 
 class Client extends Authenticatable
 {
@@ -24,4 +28,26 @@ class Client extends Authenticatable
         'password',
         'remember_token',
     ];
+
+    //     public function favorites()
+    // {
+    //     return $this->belongsToMany(Property::class, 'favorites')->withTimestamps();
+    // }
+
+    //     public function favorites()
+    // {
+    //     return $this->belongsToMany(Property::class, 'client_property', 'client_id', 'property_id');
+    // }
+
+    // public function favorites(): BelongsToMany
+    // {
+    //     return $this->belongsToMany(Property::class, 'client_property', 'client_id', 'property_id');
+    // }
+
+    public function favorites(): BelongsToMany
+    {
+        return $this->belongsToMany(Property::class, 'favorites', 'client_id', 'property_id')->withTimestamps();
+    }
+
+
 }

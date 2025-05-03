@@ -5,6 +5,7 @@ use App\Http\Controllers\ClientsModuleController;
 use App\Http\Controllers\AdminModuleController;
 use App\Http\Controllers\AgentModuleController;
 use App\Http\Controllers\PagesController;
+use App\Http\Controllers\FavoriteController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -69,6 +70,10 @@ Route::middleware(['auth:agent'])->group(function () {
     Route::put('/updateProperty/{id}', [AgentModuleController::class, 'updateProperty'])->name('updateProperty');
     Route::get('/agentSoldProperties', [AgentModuleController::class, 'agentSoldProperties'])->name('agentSoldProperties');
     Route::get('/agentArchiveProperties', [AgentModuleController::class, 'agentArchiveProperties'])->name('agentArchiveProperties');
+    Route::post('/agent/property/{id}/archive', [AgentModuleController::class, 'archive'])->name('property.archive');
+    Route::post('/agent/properties/{id}/restore', [AgentModuleController::class, 'restoreProperty'])->name('property.restore');
+
+
 
 
 
@@ -79,10 +84,17 @@ Route::middleware(['auth:agent'])->group(function () {
 Route::middleware(['auth:client'])->group(function () {
     Route::get('/clientsProfile', [ClientsModuleController::class, 'clientsProfile'])->name('clientsProfile');
     Route::get('/clientsListings', [ClientsModuleController::class, 'clientsListings'])->name('clientsListings');
-    Route::get('/favorites', [ClientsModuleController::class, 'favorites'])->name('favorites');
+    Route::get('/clientsFavorites', [ClientsModuleController::class, 'clientsFavorites'])->name('clientsFavorites');
     Route::get('/maps', [ClientsModuleController::class, 'maps'])->name('maps');
     Route::get('/messages', [ClientsModuleController::class, 'messages'])->name('messages');
-    Route::get('/myProperty', [ClientsModuleController::class, 'myProperty'])->name('myProperty'); 
+    Route::get('/myProperty', [ClientsModuleController::class, 'myProperty'])->name('myProperty');
+    
+    Route::get('/clientsViewProperties/{id}', [ClientsModuleController::class, 'clientsViewProperties'])->name('clientsViewProperties');
+
+        Route::post('/favoriteProperty/{propertyId}', [ClientsModuleController::class, 'favoriteProperty'])->name('favoriteProperty');
+
+ 
+    
 });
 
 // Route::middleware(['guestalertclient:client'])->group(function () {

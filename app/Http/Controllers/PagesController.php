@@ -13,7 +13,8 @@ class PagesController extends Controller
 
         public function home()
     {
-        $properties = Property::with('agent') // Load related agent
+        $properties = Property::with('agent')
+                        ->where('archived', false) // Load related agent
                         ->latest()            // Order by created_at DESC
                         ->take(3)             // Limit to 3 properties
                         ->get();
@@ -29,8 +30,10 @@ class PagesController extends Controller
 
     public function listings(Request $request)
 {
-    $query = Property::query()->with('agent');
-
+    $query = Property::query()
+    ->with('agent')
+    ->where('archived', false);
+    
     // Location filter
     if ($request->filled('location')) {
         $query->where(function ($q) use ($request) {
