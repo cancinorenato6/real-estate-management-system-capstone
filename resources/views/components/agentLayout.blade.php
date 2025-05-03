@@ -56,7 +56,7 @@
             <nav class="nav flex-column">
                 <a class="nav-link" href="{{route('agentDashboard')}}"><i class="fas fa-chart-line me-2"></i>Dashboard</a>
                 <a class="nav-link" href="#"><i class="fas fa-user-cog me-2"></i> My Account</a>
-                <a class="nav-link" href="#"><i class="fas fa-envelope me-2"></i> Messages</a>
+                <a class="nav-link" href="agentMessages"><i class="fas fa-envelope me-2"></i> Messages</a>
                 <a class="nav-link" href="#"><i class="fas fa-users me-2"></i> Client</a>
                 <a class="nav-link" href="{{route('agentProperties')}}"><i class="fas fa-building me-2"></i> Properties</a>
                 <a class="nav-link" href="{{route('agentSoldProperties')}}"><i class="fas fa-building me-2"></i> Sold Properties</a>

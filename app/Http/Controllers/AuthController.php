@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Client;
 Use App\Models\Admin;
 use App\Models\Agent;
+use App\Models\Message;
 // use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;

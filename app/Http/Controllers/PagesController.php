@@ -63,7 +63,7 @@ class PagesController extends Controller
 
 
 
-    $properties = $query->paginate(6); // adjust number if needed
+    $properties = $query->paginate(9); // adjust number if needed
 
     return view('listings', compact('properties'));
 }
@@ -80,9 +80,13 @@ class PagesController extends Controller
 {
     // Fetch the property with the given ID and load the related agent (if any)
     $property = Property::with('agent')->findOrFail($id);
+    $similarProperties = Property::where('city', $property->city)
+    ->where('id', '!=', $property->id)
+    ->take(3)
+    ->get(); // Example for similar properties
 
     // Return the view with the property details
-    return view('pubViewProperties', compact('property'));
+    return view('pubViewProperties', compact('property', 'similarProperties'));
 }
 
 

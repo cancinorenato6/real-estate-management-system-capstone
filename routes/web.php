@@ -62,6 +62,15 @@ Route::middleware(['guestwithalert:admin', 'guestwithalert:client', 'guestwithal
 Route::middleware(['auth:agent'])->group(function () {
     Route::get('/agentDashboard', [AgentModuleController::class, 'agentDashboard'])->name('agentDashboard');
 
+
+
+    Route::get('/agentMessages', [AgentModuleController::class, 'agentMessages'])->name('agentMessages');
+
+    Route::get('/agentMessages/{property_id}/{client_id}', [AgentModuleController::class, 'viewConversation'])->name('agent.conversation');
+
+    Route::post('/agentMessages/send', [AgentModuleController::class, 'sendMessage'])->name('agent.sendMessage');
+
+
     Route::get('/agentProperties', [AgentModuleController::class, 'agentProperties'])->name('agentProperties');
     Route::get('/createProperty', [AgentModuleController::class, 'createProperty'])->name('createProperty');
     Route::post('/storeProperty', [AgentModuleController::class, 'storeProperty'])->name('storeProperty');
@@ -86,7 +95,14 @@ Route::middleware(['auth:client'])->group(function () {
     Route::get('/clientsListings', [ClientsModuleController::class, 'clientsListings'])->name('clientsListings');
     Route::get('/clientsFavorites', [ClientsModuleController::class, 'clientsFavorites'])->name('clientsFavorites');
     Route::get('/maps', [ClientsModuleController::class, 'maps'])->name('maps');
+
+
+
     Route::get('/messages', [ClientsModuleController::class, 'messages'])->name('messages');
+    Route::get('/messages/{property_id}/{agent_id}', [ClientsModuleController::class, 'viewConversation'])->name('client.conversation');
+    Route::post('/messages/send', [ClientsModuleController::class, 'sendMessage'])->name('client.sendMessage');
+
+
     Route::get('/myProperty', [ClientsModuleController::class, 'myProperty'])->name('myProperty');
     
     Route::get('/clientsViewProperties/{id}', [ClientsModuleController::class, 'clientsViewProperties'])->name('clientsViewProperties');

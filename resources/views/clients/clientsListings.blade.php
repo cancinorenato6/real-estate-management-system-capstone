@@ -98,12 +98,10 @@
                     
                     <!-- Favorite Button -->
                     <div class="position-absolute top-0 end-0 m-2">
-                        <form method="POST" action="{{ route('favoriteProperty', $property->id) }}" 
-                              class="favorite-form" data-property-id="{{ $property->id }}">
+                        <form method="POST" action="{{ route('favoriteProperty', $property->id) }}" class="favorite-form">
                             @csrf
-                            <button type="submit" class="btn btn-light p-1 favorite-btn" style="border-radius: 50%;">
-                                <i class="bi {{ $property->favoredBy->contains(Auth::guard('client')->id()) ? 'bi-heart-fill' : 'bi-heart' }}" 
-                                   style="font-size: 1.3rem; color: red;"></i>
+                            <button type="submit" class="btn btn-light p-2 favorite-btn" style="border-radius: 50%;">
+                                <i class="bi {{ $property->favoredBy->contains(Auth::guard('client')->id()) ? 'bi-heart-fill' : 'bi-heart' }}" style="font-size: 1.5rem; color: red;"></i>
                             </button>
                         </form>
                     </div>
@@ -174,8 +172,8 @@
     }
 </style>
 
-@push('scripts')
-<script>
+
+{{-- <script>
 document.addEventListener('DOMContentLoaded', function() {
     // Add event listeners to all favorite buttons on the page
     document.querySelectorAll('.favorite-form').forEach(form => {
@@ -235,7 +233,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
-</script>
+</script> --}}
 
 <style>
 @keyframes pulse {
@@ -254,7 +252,7 @@ document.addEventListener('DOMContentLoaded', function() {
   animation: pulse 0.3s ease-in-out;
 }
 </style>
-@endpush
+
 
 <script>
     /**

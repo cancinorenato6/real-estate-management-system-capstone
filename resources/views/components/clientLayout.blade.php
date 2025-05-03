@@ -268,9 +268,28 @@
                 <a class="nav-link {{ request()->routeIs('maps') ? 'active' : '' }}" href="{{ route('maps') }}">
                     <i class="fas fa-map-marked-alt me-2"></i> Property Map
                 </a>
+                {{-- <a class="nav-link {{ request()->routeIs('messages') ? 'active' : '' }}" href="{{ route('messages') }}">
+                    <i class="fas fa-envelope me-2"></i> Messages
+                    @if(isset($total_unread) && $total_unread > 0)
+                        <span class="badge bg-danger rounded-pill float-end">{{ $total_unread }}</span>
+                    @endif
+                </a> --}}
+
                 <a class="nav-link {{ request()->routeIs('messages') ? 'active' : '' }}" href="{{ route('messages') }}">
                     <i class="fas fa-envelope me-2"></i> Messages
-                    <span class="badge bg-danger rounded-pill float-end">3</span>
+                    @php
+                        use App\Models\Message;
+                        use Illuminate\Support\Facades\Auth;
+                        $total_unread = Auth::guard('client')->check() 
+                            ? Message::where('client_id', Auth::guard('client')->user()->id)
+                                ->where('sender_type', 'agent')
+                                ->where('is_read', false)
+                                ->count() 
+                            : 0;
+                    @endphp
+                    @if($total_unread > 0)
+                        <span class="badge bg-danger rounded-pill float-end">{{ $total_unread }}</span>
+                    @endif
                 </a>
                 <a class="nav-link {{ request()->routeIs('myProperty') ? 'active' : '' }}" href="{{ route('myProperty') }}">
                     <i class="fas fa-home me-2"></i> My Properties
@@ -382,6 +401,5 @@
             });
         }
     </script>
-    @stack('scripts')
 </body>
 </html>

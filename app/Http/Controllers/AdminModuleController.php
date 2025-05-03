@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Agent;
+use App\Models\Message;
 class AdminModuleController extends Controller
 {
     public function adminDashboard(){

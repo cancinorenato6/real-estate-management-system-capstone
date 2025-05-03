@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Agent;
+use App\Models\Message;
+use App\Models\Property;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-Use App\Models\Property;
 Use App\Models\Client;
 
 class ClientsModuleController extends Controller
@@ -85,44 +87,113 @@ class ClientsModuleController extends Controller
         return view('clients.clientsMaps', ['client' => $client]);
     }
 
-    public function messages(){
+    public function messages()
+    {
         $client = Auth::guard('client')->user();
-        return view('clients.clientsMessages', ['client' => $client]);
+        \Log::info("Client ID: {$client->id}");
+
+        $conversations = Message::where('client_id', $client->id)
+            ->with(['property', 'agent'])
+            ->select('property_id', 'agent_id')
+            ->distinct()
+            ->get()
+            ->map(function ($message) use ($client) {
+                $unread_count = Message::where('property_id', $message->property_id)
+                    ->where('client_id', $client->id)
+                    ->where('agent_id', $message->agent_id)
+                    ->where('sender_type', 'agent')
+                    ->where('is_read', false)
+                    ->count();
+                \Log::info("Unread count for client {$client->id}, property {$message->property_id}, agent {$message->agent_id}: {$unread_count}");
+                return [
+                    'property' => $message->property,
+                    'agent' => $message->agent,
+                    'last_message' => Message::where('property_id', $message->property_id)
+                        ->where('client_id', $client->id)
+                        ->where('agent_id', $message->agent_id)
+                        ->latest()
+                        ->first(),
+                    'unread_count' => $unread_count,
+                ];
+            })
+            ->sortByDesc(function ($conversation) {
+                return $conversation['last_message'] ? $conversation['last_message']->created_at : '2000-01-01';
+            });
+
+        $total_unread = $conversations->sum('unread_count');
+        \Log::info("Total unread messages for client {$client->id}: {$total_unread}");
+
+        return view('clients.clientsMessages', compact('client', 'conversations', 'total_unread'));
     }
+
+    public function viewConversation($property_id, $agent_id)
+{
+    $client = Auth::guard('client')->user();
+    $property = Property::findOrFail($property_id);
+    $agent = Agent::findOrFail($agent_id);
+
+    $updatedCount = Message::where('property_id', $property_id)
+        ->where('client_id', $client->id)
+        ->where('agent_id', $agent_id)
+        ->where('sender_type', 'agent')
+        ->where('is_read', false)
+        ->update(['is_read' => true]);
+    \Log::info("Marked $updatedCount messages as read for client {$client->id}, property {$property_id}, agent {$agent_id}");
+
+    $messages = Message::where('property_id', $property_id)
+        ->where('client_id', $client->id)
+        ->where('agent_id', $agent_id)
+        ->orderBy('created_at', 'desc')
+        ->get();
+
+    // Calculate total_unread for the layout
+    $total_unread = Message::where('client_id', $client->id)
+        ->where('sender_type', 'agent')
+        ->where('is_read', false)
+        ->count();
+
+    return view('clients.clientConversation', compact('client', 'property', 'agent', 'messages', 'total_unread'));
+}
+    public function sendMessage(Request $request)
+    {
+        $request->validate([
+            'property_id' => 'required|exists:properties,id',
+            'agent_id' => 'required|exists:agents,id',
+            'message' => 'required|string|max:2000',
+        ]);
+
+        $client = Auth::guard('client')->user();
+        Message::create([
+            'property_id' => $request->property_id,
+            'client_id' => $client->id,
+            'agent_id' => $request->agent_id,
+            'message' => $request->message,
+            'sender_id' => $client->id,
+            'sender_type' => 'client',
+            'is_read' => false,
+        ]);
+
+        return response()->json(['success' => true, 'message' => 'Message sent successfully']);
+    }
+
 
     public function myProperty(){
         $client = Auth::guard('client')->user();
         return view('clients.clientsMyProperty', ['client' => $client]);
     }
 
-        public function clientsViewProperties($id)
+
+    public function clientsViewProperties($id)
     {
         $client = Auth::guard('client')->user();
-        // Fetch the property with the given ID and load the related agent (if any)
         $property = Property::with('agent')->findOrFail($id);
-
-        // Return the view with the property details
-        return view('clients.clientViewProperties', compact('property'));
+        $similarProperties = Property::where('city', $property->city)
+            ->where('id', '!=', $property->id)
+            ->take(3)
+            ->get(); // Example for similar properties
+        return view('clients.clientViewProperties', compact('property', 'client', 'similarProperties'));
     }
 
-    // public function favoriteProperty($propertyId)
-    // {
-    //     $client = Auth::guard('client')->user();
-    
-    //     if (!$client) {
-    //         return response()->json(['error' => 'Unauthorized'], 401);
-    //     }
-    //     dd(get_class($client));
-    //     $isFavorited = $client->favorites()->where('property_id', $propertyId)->exists();
-    
-    //     if ($isFavorited) {
-    //         $client->favorites()->detach($propertyId);
-    //         return response()->json(['favorited' => false]);
-    //     } else {
-    //         $client->favorites()->attach($propertyId);
-    //         return response()->json(['favorited' => true]);
-    //     }
-    // }
 
         public function favoriteProperty($propertyId)
     {
