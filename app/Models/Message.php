@@ -16,6 +16,7 @@ class Message extends Model
         'sender_id',
         'sender_type',
         'is_read',
+
     ];
 
     public function property()
@@ -32,4 +33,6 @@ class Message extends Model
     {
         return $this->belongsTo(Agent::class);
     }
+
+   
 }

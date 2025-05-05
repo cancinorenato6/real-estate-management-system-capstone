@@ -395,7 +395,7 @@ function showToastNotification(isFavorited) {
             <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
         </div>
     `;
-
+        
     toastContainer.appendChild(toast);
     const bsToast = new bootstrap.Toast(toast, { autohide: true, delay: 3000 });
     bsToast.show();
@@ -421,70 +421,3 @@ function setupCardHoverEffects() {
 }
 </script>
 @endsection
-
-
-
-
-{{-- <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Initialize the map - set coordinates to La Union, Philippines
-        const map = L.map('map').setView([16.6162, 120.3172], 12);
-        
-        // Add the OpenStreetMap tile layer
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap contributors'
-        }).addTo(map);
-        
-        // Add markers for sample properties in La Union
-        // Sample property 1 - San Carlos
-        L.marker([16.6162, 120.3172]).addTo(map)
-            .bindPopup('<b>3BR House in San Carlos</b><br>₱3,500,000<br><button onclick="viewDetails(1)">View Details</button>')
-            .openPopup();
-        
-        // Sample property 2 - nearby area
-        L.marker([16.6262, 120.3272]).addTo(map)
-            .bindPopup('<b>Modern Apartment</b><br>₱2,800,000<br><button onclick="viewDetails(2)">View Details</button>');
-            
-        // Sample property 3 - another nearby area
-        L.marker([16.6062, 120.3072]).addTo(map)
-            .bindPopup('<b>Commercial Space</b><br>₱4,200,000<br><button onclick="viewDetails(3)">View Details</button>');
-    });
-    
-    // Function to handle viewing property details
-    function viewDetails(propertyId) {
-        // You can replace this with actual navigation to property details
-        alert('Viewing property #' + propertyId);
-        // Or use: window.location.href = '/property/' + propertyId;
-    }
-</script> --}}
-{{-- <script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
-<script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const map = L.map('map').setView([16.6162, 120.3172], 12); // Centered on San Carlos City, La Union
-
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap contributors'
-        }).addTo(map);
-
-        const properties = @json($properties);
-
-        properties.forEach(property => {
-            if (property.latitude && property.longitude) {
-                const popupContent = `
-                    <b>${property.title}</b><br>
-                    ₱${parseFloat(property.price).toLocaleString()}<br>
-                    <button onclick="window.location.href='/property/${property.id}'">View Details</button>
-                `;
-                L.marker([property.latitude, property.longitude]).addTo(map)
-                    .bindPopup(popupContent);
-            }
-        });
-    });
-</script>
-
-@endsection --}}

@@ -64,11 +64,18 @@ Route::middleware(['auth:agent'])->group(function () {
 
 
 
+    // Route::get('/agentMessages', [AgentModuleController::class, 'agentMessages'])->name('agentMessages');
+
+    // Route::get('/agentMessages/{property_id}/{client_id}', [AgentModuleController::class, 'viewConversation'])->name('agent.conversation');
+
+    // Route::post('/agentMessages/send', [AgentModuleController::class, 'sendMessage'])->name('agent.sendMessage');
+
     Route::get('/agentMessages', [AgentModuleController::class, 'agentMessages'])->name('agentMessages');
 
     Route::get('/agentMessages/{property_id}/{client_id}', [AgentModuleController::class, 'viewConversation'])->name('agent.conversation');
 
     Route::post('/agentMessages/send', [AgentModuleController::class, 'sendMessage'])->name('agent.sendMessage');
+
 
 
     Route::get('/agentProperties', [AgentModuleController::class, 'agentProperties'])->name('agentProperties');
@@ -98,9 +105,13 @@ Route::middleware(['auth:client'])->group(function () {
 
 
 
+    // Route::get('/messages', [ClientsModuleController::class, 'messages'])->name('messages');
+    // Route::get('/messages/{property_id}/{agent_id}', [ClientsModuleController::class, 'viewConversation'])->name('client.conversation');
+    // Route::post('/messages/send', [ClientsModuleController::class, 'sendMessage'])->name('client.sendMessage');
     Route::get('/messages', [ClientsModuleController::class, 'messages'])->name('messages');
     Route::get('/messages/{property_id}/{agent_id}', [ClientsModuleController::class, 'viewConversation'])->name('client.conversation');
     Route::post('/messages/send', [ClientsModuleController::class, 'sendMessage'])->name('client.sendMessage');
+ 
 
 
     Route::get('/myProperty', [ClientsModuleController::class, 'myProperty'])->name('myProperty');

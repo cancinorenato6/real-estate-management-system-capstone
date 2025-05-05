@@ -262,19 +262,6 @@
                 <a class="nav-link {{ request()->routeIs('clientsListings') ? 'active' : '' }}" href="{{ route('clientsListings') }}">
                     <i class="fas fa-list me-2"></i> Browse Properties
                 </a>
-                <a class="nav-link {{ request()->routeIs('clientsFavorites') ? 'active' : '' }}" href="{{ route('clientsFavorites') }}">
-                    <i class="fas fa-heart me-2"></i> My Favorites
-                </a>
-                <a class="nav-link {{ request()->routeIs('maps') ? 'active' : '' }}" href="{{ route('maps') }}">
-                    <i class="fas fa-map-marked-alt me-2"></i> Property Map
-                </a>
-                {{-- <a class="nav-link {{ request()->routeIs('messages') ? 'active' : '' }}" href="{{ route('messages') }}">
-                    <i class="fas fa-envelope me-2"></i> Messages
-                    @if(isset($total_unread) && $total_unread > 0)
-                        <span class="badge bg-danger rounded-pill float-end">{{ $total_unread }}</span>
-                    @endif
-                </a> --}}
-
                 <a class="nav-link {{ request()->routeIs('messages') ? 'active' : '' }}" href="{{ route('messages') }}">
                     <i class="fas fa-envelope me-2"></i> Messages
                     @php
@@ -291,9 +278,22 @@
                         <span class="badge bg-danger rounded-pill float-end">{{ $total_unread }}</span>
                     @endif
                 </a>
-                <a class="nav-link {{ request()->routeIs('myProperty') ? 'active' : '' }}" href="{{ route('myProperty') }}">
-                    <i class="fas fa-home me-2"></i> My Properties
+                <a class="nav-link {{ request()->routeIs('clientsFavorites') ? 'active' : '' }}" href="{{ route('clientsFavorites') }}">
+                    <i class="fas fa-heart me-2"></i> My Favorites
                 </a>
+                <a class="nav-link {{ request()->routeIs('maps') ? 'active' : '' }}" href="{{ route('maps') }}">
+                    <i class="fas fa-map-marked-alt me-2"></i> Property Map
+                </a>
+                {{-- <a class="nav-link {{ request()->routeIs('messages') ? 'active' : '' }}" href="{{ route('messages') }}">
+                    <i class="fas fa-envelope me-2"></i> Messages
+                    @if(isset($total_unread) && $total_unread > 0)
+                        <span class="badge bg-danger rounded-pill float-end">{{ $total_unread }}</span>
+                    @endif
+                </a> --}}
+
+                {{-- <a class="nav-link {{ request()->routeIs('myProperty') ? 'active' : '' }}" href="{{ route('myProperty') }}">
+                    <i class="fas fa-home me-2"></i> My Properties
+                </a> --}}
                 
                 <div class="border-top my-3 opacity-25"></div>
                 

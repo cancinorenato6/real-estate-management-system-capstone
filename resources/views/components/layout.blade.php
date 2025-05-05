@@ -513,19 +513,37 @@
                 </div>
 
                 <!-- Contact Form Section -->
+                @guest
                 <div class="contact-column">
                     <h2>Contact Form</h2>
-                    <form class="contact-form" action="#" method="POST">
+                    <div class="contact-form">
+                        <div class="form-row">
+                            <input type="text" name="first_name" placeholder="First name" disabled>
+                            <input type="text" name="last_name" placeholder="Last name" disabled>
+                        </div>
+                        <input type="email" name="email" placeholder="Email" disabled>
+                        <textarea name="message" placeholder="Message" rows="4" disabled></textarea>
+                        <a href="{{ route('login') }}?login_required=true&redirect_to={{ url()->current() }}" class="send-message btn">
+                            Login to Send Message
+                        </a>
+                        <p class="text-muted mt-2 small">You need to be logged in to send messages</p>
+                    </div>
+                </div>
+                @else
+                <div class="contact-column">
+                    <h2>Contact Form</h2>
+                    <form class="contact-form" action="{{ route('send.message') }}" method="POST">
                         @csrf
                         <div class="form-row">
                             <input type="text" name="first_name" placeholder="First name" required>
                             <input type="text" name="last_name" placeholder="Last name" required>
                         </div>
-                        <input type="email" name="email" placeholder="Email" required>
+                        <input type="email" name="email" placeholder="Email" value="{{ auth()->user()->email }}" required>
                         <textarea name="message" placeholder="Message" rows="4" required></textarea>
                         <button type="submit" class="send-message">Send Message</button>
                     </form>
                 </div>
+                @endguest
             </div>
         </footer>
     @show

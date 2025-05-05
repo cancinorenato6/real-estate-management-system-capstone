@@ -86,6 +86,100 @@ class AgentModuleController extends Controller
     //     return response()->json(['success' => true, 'message' => 'Message sent successfully']);
     // }
 
+    // public function agentMessages()
+    // {
+    //     $agent = Auth::guard('agent')->user();
+    //     $conversations = Message::where('agent_id', $agent->id)
+    //         ->with(['property', 'client'])
+    //         ->select('property_id', 'client_id')
+    //         ->distinct()
+    //         ->get()
+    //         ->map(function ($message) use ($agent) {
+    //             return [
+    //                 'property' => $message->property,
+    //                 'client' => $message->client,
+    //                 'last_message' => Message::where('agent_id', $agent->id)
+    //                     ->where('client_id', $message->client_id)
+    //                     ->when($message->property_id, function ($query, $property_id) {
+    //                         return $query->where('property_id', $property_id);
+    //                     }, function ($query) {
+    //                         return $query->whereNull('property_id');
+    //                     })
+    //                     ->latest()
+    //                     ->first(),
+    //                 'has_unread' => Message::where('agent_id', $agent->id)
+    //                     ->where('client_id', $message->client_id)
+    //                     ->when($message->property_id, function ($query, $property_id) {
+    //                         return $query->where('property_id', $property_id);
+    //                     }, function ($query) {
+    //                         return $query->whereNull('property_id');
+    //                     })
+    //                     ->where('sender_type', 'client')
+    //                     ->where('is_read', false)
+    //                     ->exists(),
+    //             ];
+    //         })
+    //         ->sortByDesc(function ($conversation) {
+    //             return $conversation['last_message'] ? $conversation['last_message']->created_at : '2000-01-01';
+    //         });
+
+    //     $total_unread = $conversations->filter(function ($conversation) {
+    //         return $conversation['has_unread'];
+    //     })->count();
+
+    //     return view('agents.agentMessages', compact('agent', 'conversations', 'total_unread'));
+    // }
+
+    // public function viewConversation($property_id, $client_id)
+    // {
+    //     $agent = Auth::guard('agent')->user();
+    //     $property = $property_id ? Property::findOrFail($property_id) : null;
+    //     $client = Client::findOrFail($client_id);
+
+    //     $updatedCount = Message::where('property_id', $property_id)
+    //         ->where('client_id', $client_id)
+    //         ->where('agent_id', $agent->id)
+    //         ->where('sender_type', 'client')
+    //         ->where('is_read', false)
+    //         ->update(['is_read' => true]);
+    //     \Log::info("Marked $updatedCount messages as read for agent {$agent->id}, property " . ($property_id ?? 'null') . ", client {$client_id}");
+
+    //     $messages = Message::where('client_id', $client_id)
+    //         ->where('agent_id', $agent->id)
+    //         ->when($property_id, function ($query, $property_id) {
+    //             return $query->where('property_id', $property_id);
+    //         }, function ($query) {
+    //             return $query->whereNull('property_id');
+    //         })
+    //         ->orderBy('created_at', 'desc')
+    //         ->get();
+
+    //     return view('agents.agentConversation', compact('agent', 'property', 'client', 'messages'));
+    // }
+
+    // public function sendMessage(Request $request)
+    // {
+    //     $request->validate([
+    //         'property_id' => 'required|exists:properties,id',
+    //         'client_id' => 'required|exists:clients,id',
+    //         'message' => 'required|string|max:2000',
+    //     ]);
+
+    //     $agent = Auth::guard('agent')->user();
+    //     Message::create([
+    //         'property_id' => $request->property_id,
+    //         'client_id' => $request->client_id,
+    //         'agent_id' => $agent->id,
+    //         'message' => $request->message,
+    //         'sender_id' => $agent->id,
+    //         'sender_type' => 'agent',
+    //     ]);
+
+        
+
+    //     return response()->json(['success' => true, 'message' => 'Message sent successfully']);
+    // }
+
     public function agentMessages()
     {
         $agent = Auth::guard('agent')->user();
