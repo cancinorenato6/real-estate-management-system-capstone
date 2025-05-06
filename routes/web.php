@@ -99,6 +99,7 @@ Route::middleware(['auth:agent'])->group(function () {
 // Client views
 Route::middleware(['auth:client'])->group(function () {
     Route::get('/clientsProfile', [ClientsModuleController::class, 'clientsProfile'])->name('clientsProfile');
+    Route::post('/updateProfilePic', [ClientsModuleController::class, 'updateProfilePic'])->name('updateProfilePic');
     Route::get('/clientsListings', [ClientsModuleController::class, 'clientsListings'])->name('clientsListings');
     Route::get('/clientsFavorites', [ClientsModuleController::class, 'clientsFavorites'])->name('clientsFavorites');
     Route::get('/maps', [ClientsModuleController::class, 'maps'])->name('maps');

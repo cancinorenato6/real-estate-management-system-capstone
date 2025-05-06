@@ -195,10 +195,9 @@
 </div>
 
 <!-- Map Script -->
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
 
-<script>
+
+{{-- <script>
     document.addEventListener('DOMContentLoaded', function () {
         // Initialize map
         const map = L.map('map').setView([16.6162, 120.3172], 12); // Centered on La Union
@@ -222,6 +221,76 @@
                 L.marker([property.latitude, property.longitude]).addTo(map)
                     .bindPopup(popupContent);
             }
+        });
+    });
+</script> --}}
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Initialize map
+        const map = L.map('map').setView([16.615891, 120.320937], 12); // La Union coordinates
+
+        // Add OpenStreetMap tiles
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+            maxZoom: 19,
+        }).addTo(map);
+
+        // Initialize marker cluster group
+        const markers = L.markerClusterGroup({
+            spiderfyOnMaxZoom: true,
+            showCoverageOnHover: true,
+            zoomToBoundsOnClick: true,
+        });
+
+        // Get properties from Laravel
+        const properties = @json($properties);
+
+        // Add markers for each property
+        properties.forEach(property => {
+            if (property.latitude && property.longitude) {
+                const popupContent = `
+                    <div class="map-popup">
+                        <h5>${property.title}</h5>
+                        <p><strong>₱${parseFloat(property.price).toLocaleString('en-PH', { minimumFractionDigits: 2 })}</strong></p>
+                        <p>${property.barangay}, ${property.city}, ${property.province}</p>
+                        <p>${property.offer_type.charAt(0).toUpperCase() + property.offer_type.slice(1)} | 
+                           ${property.property_type.charAt(0).toUpperCase() + property.property_type.slice(1)}</p>
+                        <a href="{{ url('/pubViewProperties') }}/${property.id}" class="btn btn-sm btn-primary">View Details</a>
+                    </div>
+                `;
+                const marker = L.marker([property.latitude, property.longitude])
+                    .bindPopup(popupContent, { maxWidth: 300 });
+
+                // Store property ID for interaction
+                marker.propertyId = property.id;
+                markers.addLayer(marker);
+            }
+        });
+
+        // Add marker cluster group to map
+        map.addLayer(markers);
+
+        // Optional: Fit map to bounds if there are markers
+       // Fit map to bounds only if there are multiple markers, otherwise use initial view
+       if (markers.getLayers().length > 1) {
+            map.fitBounds(markers.getBounds().pad(0.2));
+        } else if (markers.getLayers().length === 1) {
+            map.setView(markers.getLayers()[0].getLatLng(), 12); // Moderate zoom for one marker
+        }
+
+        // Add click event to property cards to zoom to marker
+        document.querySelectorAll('.card').forEach(card => {
+            card.addEventListener('click', function (e) {
+                const propertyId = this.querySelector('a[href*="/property/"]').href.split('/').pop();
+                markers.eachLayer(marker => {
+                    if (marker.propertyId == propertyId) {
+                        map.setView(marker.getLatLng(), 15);
+                        marker.openPopup();
+                    }
+                });
+            });
         });
     });
 </script>

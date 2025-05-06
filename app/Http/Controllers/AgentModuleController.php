@@ -276,91 +276,177 @@ class AgentModuleController extends Controller
         return view('agents.createProperty');
     }
 
-    public function storeProperty(Request $request){
-        $request->validate([
-            'offer_type' => 'required|in:sell,rent',
-            'property_type' => 'required|in:condominium,commercial_space,apartment,house,land',
-            'title' => 'required',
-            'description' => 'required',
-            'price' => 'required',
-            'province' => 'required',
-            'city' => 'required',
-            'barangay' => 'required',
-            'images.*' => 'image', // each image max 2MB
-        ]);
+    // public function storeProperty(Request $request){
+    //     $request->validate([
+    //         'offer_type' => 'required|in:sell,rent',
+    //         'property_type' => 'required|in:condominium,commercial_space,apartment,house,land',
+    //         'title' => 'required',
+    //         'description' => 'required',
+    //         'price' => 'required',
+    //         'province' => 'required',
+    //         'city' => 'required',
+    //         'barangay' => 'required',
+    //         'images.*' => 'image', // each image max 2MB
+    //     ]);
 
-        $agent = Auth::guard('agent')->user();
-        $imagePaths = [];
+    //     $agent = Auth::guard('agent')->user();
+    //     $imagePaths = [];
 
-        if($request->hasFile('images')) {
-            foreach($request->file('images') as $image) {
-                $path = $image->store('properties', 'public');
-                $imagePaths[] = $path;
-            }
+    //     if($request->hasFile('images')) {
+    //         foreach($request->file('images') as $image) {
+    //             $path = $image->store('properties', 'public');
+    //             $imagePaths[] = $path;
+    //         }
+    //     }
+
+    //     Property::create([
+    //         'agent_id' => $agent->id,
+    //         'offer_type' => $request->offer_type,
+    //         'property_type' => $request->property_type,
+    //         'title' => $request->title,
+    //         'description' => $request->description,
+    //         'price' => $request->price,
+    //         'province' => $request->province,
+    //         'city' => $request->city,
+    //         'barangay' => $request->barangay,
+    //         'images' => $imagePaths,
+    //     ]);
+
+    //     return redirect()->route('agentProperties')->with('success', 'Property added successfully.');
+    // }
+    public function storeProperty(Request $request)
+{
+    $request->validate([
+        'offer_type' => 'required|in:sell,rent',
+        'property_type' => 'required|in:condominium,commercial_space,apartment,house,land',
+        'title' => 'required',
+        'description' => 'required',
+        'price' => 'required|numeric',
+        'province' => 'required',
+        'city' => 'required',
+        'barangay' => 'required',
+        'latitude' => 'nullable|numeric',
+        'longitude' => 'nullable|numeric',
+        'images.*' => 'image', // each image max 2MB
+    ]);
+
+    $agent = Auth::guard('agent')->user();
+    $imagePaths = [];
+
+    if($request->hasFile('images')) {
+        foreach($request->file('images') as $image) {
+            $path = $image->store('properties', 'public');
+            $imagePaths[] = $path;
         }
-
-        Property::create([
-            'agent_id' => $agent->id,
-            'offer_type' => $request->offer_type,
-            'property_type' => $request->property_type,
-            'title' => $request->title,
-            'description' => $request->description,
-            'price' => $request->price,
-            'province' => $request->province,
-            'city' => $request->city,
-            'barangay' => $request->barangay,
-            'images' => $imagePaths,
-        ]);
-
-        return redirect()->route('agentProperties')->with('success', 'Property added successfully.');
     }
 
-    public function editProperty($id){
-        $property = Property::findOrFail($id);
+    Property::create([
+        'agent_id' => $agent->id,
+        'offer_type' => $request->offer_type,
+        'property_type' => $request->property_type,
+        'title' => $request->title,
+        'description' => $request->description,
+        'price' => $request->price,
+        'province' => $request->province,
+        'city' => $request->city,
+        'barangay' => $request->barangay,
+        'latitude' => $request->latitude,
+        'longitude' => $request->longitude,
+        'images' => $imagePaths,
+    ]);
 
-        return view('agents.editProperty', compact('property'));
-    }
+    return redirect()->route('agentProperties')->with('success', 'Property added successfully.');
+}
 
-    public function updateProperty(Request $request, $id){
-        $property = Property::findOrFail($id);
+    // public function editProperty($id){
+    //     $property = Property::findOrFail($id);
 
-        $request->validate([
-            'offer_type' => 'required|in:sell,rent',
-            'property_type' => 'required|in:condominium,commercial_space,apartment,house,land',
-            'title' => 'required',
-            'description' => 'required',
-            'price' => 'required|numeric',
-            'province' => 'required',
-            'city' => 'required',
-            'barangay' => 'required',
-            'images.*' => 'image',
-        ]);
+    //     return view('agents.editProperty', compact('property'));
+    // }
 
-        $imagePaths = $property->images ?? [];
+    // public function updateProperty(Request $request, $id){
+    //     $property = Property::findOrFail($id);
 
-        if($request->hasFile('images')) {
-            foreach($request->file('images') as $image) {
-                $path = $image->store('properties', 'public');
-                $imagePaths[] = $path;
-            }
+    //     $request->validate([
+    //         'offer_type' => 'required|in:sell,rent',
+    //         'property_type' => 'required|in:condominium,commercial_space,apartment,house,land',
+    //         'title' => 'required',
+    //         'description' => 'required',
+    //         'price' => 'required|numeric',
+    //         'province' => 'required',
+    //         'city' => 'required',
+    //         'barangay' => 'required',
+    //         'images.*' => 'image',
+    //     ]);
+
+    //     $imagePaths = $property->images ?? [];
+
+    //     if($request->hasFile('images')) {
+    //         foreach($request->file('images') as $image) {
+    //             $path = $image->store('properties', 'public');
+    //             $imagePaths[] = $path;
+    //         }
+    //     }
+
+    //     $property->update([
+    //         'offer_type' => $request->offer_type,
+    //         'property_type' => $request->property_type,
+    //         'title' => $request->title,
+    //         'description' => $request->description,
+    //         'price' => $request->price,
+    //         'province' => $request->province,
+    //         'city' => $request->city,
+    //         'barangay' => $request->barangay,
+    //         'images' => $imagePaths,
+    //     ]);
+
+    //     $property->save();
+
+    //     return redirect()->route('agentProperties')->with('success', 'Property updated successfully.');
+    // }
+    public function updateProperty(Request $request, $id)
+{
+    $property = Property::findOrFail($id);
+
+    $request->validate([
+        'offer_type' => 'required|in:sell,rent',
+        'property_type' => 'required|in:condominium,commercial_space,apartment,house,land',
+        'title' => 'required',
+        'description' => 'required',
+        'price' => 'required|numeric',
+        'province' => 'required',
+        'city' => 'required',
+        'barangay' => 'required',
+        'latitude' => 'nullable|numeric',
+        'longitude' => 'nullable|numeric',
+        'images.*' => 'image',
+    ]);
+
+    $imagePaths = $property->images ?? [];
+
+    if($request->hasFile('images')) {
+        foreach($request->file('images') as $image) {
+            $path = $image->store('properties', 'public');
+            $imagePaths[] = $path;
         }
-
-        $property->update([
-            'offer_type' => $request->offer_type,
-            'property_type' => $request->property_type,
-            'title' => $request->title,
-            'description' => $request->description,
-            'price' => $request->price,
-            'province' => $request->province,
-            'city' => $request->city,
-            'barangay' => $request->barangay,
-            'images' => $imagePaths,
-        ]);
-
-        $property->save();
-
-        return redirect()->route('agentProperties')->with('success', 'Property updated successfully.');
     }
+
+    $property->update([
+        'offer_type' => $request->offer_type,
+        'property_type' => $request->property_type,
+        'title' => $request->title,
+        'description' => $request->description,
+        'price' => $request->price,
+        'province' => $request->province,
+        'city' => $request->city,
+        'barangay' => $request->barangay,
+        'latitude' => $request->latitude,
+        'longitude' => $request->longitude,
+        'images' => $imagePaths,
+    ]);
+
+    return redirect()->route('agentProperties')->with('success', 'Property updated successfully.');
+}
 
     public function deleteProperty($id){
         $property = Property::findOrFail($id);

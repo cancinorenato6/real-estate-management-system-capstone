@@ -7,6 +7,7 @@ use App\Models\Message;
 use App\Models\Property;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 Use App\Models\Client;
 
 class ClientsModuleController extends Controller
@@ -15,6 +16,35 @@ class ClientsModuleController extends Controller
         $client = Auth::guard('client')->user();
         return view('clients.clientsProfile', ['client' => $client]);
     }
+
+    public function updateProfilePic(Request $request)
+{
+    $request->validate([
+        'profile_pic' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+    ]);
+
+    $client = Auth::guard('client')->user();
+
+    if ($request->hasFile('profile_pic')) {
+        // Delete old profile picture if exists
+        if ($client->profile_pic) {
+            Storage::disk('public')->delete('profile_pics/' . $client->profile_pic);
+        }
+
+        // Store the new picture
+        $fileName = time() . '.' . $request->profile_pic->extension();
+        $request->profile_pic->storeAs('profile_pics', $fileName, 'public');
+
+        // Update database
+        $client->profile_pic = $fileName;
+        $client->save();
+
+        return redirect()->route('clientsProfile')->with('success', 'Profile picture updated successfully!');
+    }
+
+    return redirect()->route('clientsProfile')->with('error', 'Something went wrong!');
+}
+
 
     public function clientsListings(Request $request){
         $client = Auth::guard('client')->user();
@@ -82,9 +112,53 @@ class ClientsModuleController extends Controller
         return view('clients.clientsFavorites', compact('favorites'));
     }
 
-    public function maps(){
+    // public function maps(){
+    //     $client = Auth::guard('client')->user();
+    //     $properties = Property::with('agent')
+    //     ->where('archived', false) // Load related agent
+    //     ->latest()            // Order by created_at DESC
+    //     ->take(3)             // Limit to 3 properties
+    //     ->get();
+    //     return view('clients.clientsMaps', compact('properties'), ['client' => $client]);
+    // }
+    public function maps(Request $request){
         $client = Auth::guard('client')->user();
-        return view('clients.clientsMaps', ['client' => $client]);
+        
+        // Start building the query for properties
+        $query = Property::with('agent')
+            ->where('archived', false);
+    
+        // Location filter
+        if ($request->filled('location')) {
+            $query->where(function ($q) use ($request) {
+                $q->where('barangay', 'like', '%' . $request->location . '%')
+                  ->orWhere('city', 'like', '%' . $request->location . '%')
+                  ->orWhere('province', 'like', '%' . $request->location . '%');
+            });
+        }
+    
+        // Property Type filter
+        if ($request->filled('property_type')) {
+            $query->where('property_type', $request->property_type);
+        }
+    
+        // Price Range filter
+        if ($price = $request->price) {
+            // Show properties where price is less than or equal to input
+            $query->where('price', '<=', (float) $price);
+        
+            // Sort by price ascending
+            $query->orderByRaw("CASE WHEN price = ? THEN 0 ELSE 1 END", [(float) $price])
+                  ->orderBy('price', 'asc');
+        } else {
+            // Default sorting if no price filter
+            $query->orderBy('created_at', 'desc');
+        }
+    
+        // Get all properties that match the filters
+        $properties = $query->get();
+        
+        return view('clients.clientsMaps', compact('properties', 'client'));
     }
 
     // public function messages()

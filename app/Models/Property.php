@@ -23,6 +23,8 @@ class Property extends Model
         'province',
         'city',
         'barangay',
+        'latitude',      // Add this
+        'longitude',
     ];
 
     protected $casts = [
