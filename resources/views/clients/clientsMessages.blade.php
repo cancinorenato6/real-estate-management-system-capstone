@@ -88,7 +88,7 @@
             <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#listPropertyModal">
                 <i class="bi bi-plus"></i> List Your Property
             </button>
-        </div>
+            </div>
     <div class="card shadow-sm hover-shadow">
         <div class="card-header bg-white">
             <h4 class="mb-0"><i class="bi bi-envelope me-2"></i>Conversations</h4>

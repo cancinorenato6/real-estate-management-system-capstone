@@ -80,10 +80,12 @@ class PagesController extends Controller
 {
     // Fetch the property with the given ID and load the related agent (if any)
     $property = Property::with('agent')->findOrFail($id);
-    $similarProperties = Property::where('city', $property->city)
+    $similarProperties = Property::with('agent')
+    ->where('city', $property->city)
     ->where('id', '!=', $property->id)
+    ->where('archived', false)
     ->take(3)
-    ->get(); // Example for similar properties
+    ->get();  // Example for similar properties
 
     // Return the view with the property details
     return view('pubViewProperties', compact('property', 'similarProperties'));

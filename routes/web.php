@@ -6,6 +6,7 @@ use App\Http\Controllers\AdminModuleController;
 use App\Http\Controllers\AgentModuleController;
 use App\Http\Controllers\PagesController;
 use App\Http\Controllers\FavoriteController;
+use App\Models\Agent;
 use Illuminate\Support\Facades\Route;
 
 
@@ -89,7 +90,12 @@ Route::middleware(['auth:agent'])->group(function () {
     Route::post('/agent/property/{id}/archive', [AgentModuleController::class, 'archive'])->name('property.archive');
     Route::post('/agent/properties/{id}/restore', [AgentModuleController::class, 'restoreProperty'])->name('property.restore');
 
+    Route::get('/agentMaps', [AgentModuleController::class, 'agentMaps'])->name('agentMaps');
 
+    Route::get('/agentViewClients', [AgentModuleController::class, 'agentViewClients'])->name('agentViewClients');
+    
+    Route::get('/agentAccount', [AgentModuleController::class, 'agentAccount'])->name('agentAccount');
+Route::post('/updateAgentProfilePic', [AgentModuleController::class, 'updateAgentProfilePic'])->name('updateAgentProfilePic');
 
 
 

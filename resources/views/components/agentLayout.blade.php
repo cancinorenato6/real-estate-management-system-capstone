@@ -389,13 +389,26 @@
                 <a class="nav-link {{ request()->routeIs('agentDashboard') ? 'active' : '' }}" href="{{ route('agentDashboard') }}">
                     <i class="fas fa-chart-line me-2"></i> Dashboard
                 </a>
-                <a class="nav-link {{ request()->routeIs('agentAccount') ? 'active' : '' }}" href="#">
+                <a class="nav-link {{ request()->routeIs('agentAccount') ? 'active' : '' }}" href="{{route('agentAccount')}}">
                     <i class="fas fa-user-cog me-2"></i> My Account
                 </a>
                 <a class="nav-link {{ request()->routeIs('agentMessages') ? 'active' : '' }}" href="{{ route('agentMessages') }}">
                     <i class="fas fa-envelope me-2"></i> Messages
+                    @php
+                        use App\Models\Message;
+                        use Illuminate\Support\Facades\Auth;
+                        $total_unread = Auth::guard('agent')->check() 
+                            ? Message::where('agent_id', Auth::guard('agent')->user()->id)
+                                ->where('sender_type', 'client')
+                                ->where('is_read', false)
+                                ->count() 
+                            : 0;
+                    @endphp
+                    @if($total_unread > 0)
+                        <span class="badge bg-danger rounded-pill float-end">{{ $total_unread }}</span>
+                    @endif
                 </a>
-                <a class="nav-link {{ request()->routeIs('agentClients') ? 'active' : '' }}" href="#">
+                <a class="nav-link {{ request()->routeIs('agentClients') ? 'active' : '' }}" href="{{route('agentViewClients')}}">
                     <i class="fas fa-users me-2"></i> Clients
                 </a>
                 <a class="nav-link {{ request()->routeIs('agentProperties') ? 'active' : '' }}" href="{{ route('agentProperties') }}">
@@ -407,10 +420,10 @@
                 <a class="nav-link {{ request()->routeIs('agentArchiveProperties') ? 'active' : '' }}" href="{{ route('agentArchiveProperties') }}">
                     <i class="fas fa-folder me-2"></i> Archived Properties
                 </a>
-                <a class="nav-link {{ request()->routeIs('agentMaps') ? 'active' : '' }}" href="#">
+                <a class="nav-link {{ request()->routeIs('agentMaps') ? 'active' : '' }}" href="{{route('agentMaps')}}">
                     <i class="fas fa-map-marked-alt me-2"></i> Maps
                 </a>
-
+            
                 <div class="border-top my-3 opacity-25"></div>
                 
                 <a class="nav-link" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
@@ -420,7 +433,6 @@
                     @csrf
                 </form>
             </nav>
-            
             <div class="mt-auto p-3 text-center sidebar-footer">
                 <small class="text-light opacity-75">© 2025 Canaanland Realty</small>
             </div>

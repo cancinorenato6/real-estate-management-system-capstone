@@ -85,20 +85,7 @@ class ClientsModuleController extends Controller
         return view('clients.clientsListings', compact('properties'));
     }
 
-    // public function favorites(){
-    //     $client = Auth::guard('client')->user();
-    //     return view('clients.clientsFavorites', ['client' => $client]);
-    // }
 
-    // public function clientsFavorites($id)
-    // {
-    //     $client = Auth::guard('client')->user();
-    //     $client = Client::find($id); 
-    //     // dd(get_class($client));
-    //     $favorites = $client->favorites()->with('agent')->paginate(6);
-
-    //     return view('clients.clientsFavorites', compact('favorites'));
-    // }
 
         public function clientsFavorites()
     {
@@ -386,16 +373,35 @@ class ClientsModuleController extends Controller
     }
 
 
+    // public function clientsViewProperties($id)
+    // {
+    //     $client = Auth::guard('client')->user();
+    //     $property = Property::with('agent')->findOrFail($id);
+    //     $similarProperties = Property::where('city', $property->city)
+    //         ->where('id', '!=', $property->id)
+    //         ->take(3)
+    //         ->get(); 
+            
+    //         $query = Property::query()
+    //         ->with('agent')
+    //         ->where('archived', false);// Example for similar properties
+    //     return view('clients.clientViewProperties', compact('property', 'client', 'similarProperties'));
+    // }
     public function clientsViewProperties($id)
-    {
-        $client = Auth::guard('client')->user();
-        $property = Property::with('agent')->findOrFail($id);
-        $similarProperties = Property::where('city', $property->city)
-            ->where('id', '!=', $property->id)
-            ->take(3)
-            ->get(); // Example for similar properties
-        return view('clients.clientViewProperties', compact('property', 'client', 'similarProperties'));
-    }
+{
+    $client = Auth::guard('client')->user();
+    $property = Property::with('agent')->findOrFail($id);
+
+    $similarProperties = Property::with('agent')
+        ->where('city', $property->city)
+        ->where('id', '!=', $property->id)
+        ->where('archived', false)
+        ->take(3)
+        ->get(); 
+
+    return view('clients.clientViewProperties', compact('property', 'client', 'similarProperties'));
+}
+
 
 
         public function favoriteProperty($propertyId)
