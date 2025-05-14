@@ -792,6 +792,135 @@ document.addEventListener('DOMContentLoaded', function() {
 /**
  * Initialize the property map with markers for all properties
  */
+// function initializePropertyMap() {
+//     // Get property data from PHP
+//     const properties = @json($properties->items());
+    
+//     if (properties.length === 0) {
+//         document.getElementById('property-map').style.height = '150px';
+//         const mapElement = document.getElementById('property-map');
+//         mapElement.innerHTML = `
+//             <div class="d-flex align-items-center justify-content-center h-100 bg-light">
+//                 <div class="text-center">
+//                     <i class="bi bi-map text-muted" style="font-size: 3rem;"></i>
+//                     <p class="mt-2 text-muted">No properties to display on the map</p>
+//                 </div>
+//             </div>
+//         `;
+//         return;
+//     }
+    
+//     // Initialize map centered on the first property or default to a central location
+//     const defaultCoords = [16.615891, 120.320937]; // Default coordinates
+//     let centerLat, centerLng;
+    
+//     if (properties.length > 0 && properties[0].latitude && properties[0].longitude) {
+//         centerLat = properties[0].latitude;
+//         centerLng = properties[0].longitude;
+//     } else {
+//         [centerLat, centerLng] = defaultCoords;
+//     }
+    
+//     const map = L.map('property-map').setView([centerLat, centerLng], 12);
+    
+//     // Add OpenStreetMap tiles
+//     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+//         attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+//         maxZoom: 19,
+//     }).addTo(map);
+    
+//     // Initialize marker cluster group
+//     const markers = L.markerClusterGroup({
+//         spiderfyOnMaxZoom: true,
+//         showCoverageOnHover: true,
+//         zoomToBoundsOnClick: true
+//     });
+    
+//     // Store markers by property ID for later reference
+//     const markersByPropertyId = {};
+    
+//     // Add markers for each property
+//     properties.forEach(property => {
+//         if (property.latitude && property.longitude) {
+//             // Create property image HTML
+//             let imageHtml;
+//             if (property.images && property.images.length > 0) {
+//                 imageHtml = `<img src="{{ asset('storage') }}/${property.images[0]}" alt="${property.title}">`;
+//             } else {
+//                 imageHtml = `<div class="bg-light text-center py-3"><i class="bi bi-house" style="font-size: 2rem; color: #ccc;"></i></div>`;
+//             }
+            
+//             // Create popup content
+//             const popupContent = `
+//                 <div class="map-popup">
+//                     ${imageHtml}
+//                     <h5>${property.title}</h5>
+//                     <div class="price">₱${parseFloat(property.price).toLocaleString('en-PH', { minimumFractionDigits: 2 })}</div>
+//                     <div class="location">
+//                         <i class="bi bi-geo-alt-fill"></i> ${property.barangay}, ${property.city}
+//                     </div>
+//                     <div class="d-flex gap-1 justify-content-center mb-2">
+//                         <span class="badge bg-primary">${property.offer_type.charAt(0).toUpperCase() + property.offer_type.slice(1)}</span>
+//                         <span class="badge bg-info">${property.property_type.charAt(0).toUpperCase() + property.property_type.slice(1)}</span>
+//                     </div>
+//                     <a href="{{ url('/clientsViewProperties') }}/${property.id}" class="btn btn-sm btn-primary w-100">View Details</a>
+//                 </div>
+//             `;
+            
+//             // Create marker
+//             const marker = L.marker([property.latitude, property.longitude])
+//                 .bindPopup(popupContent, { maxWidth: 300 });
+            
+//             // Store property ID in marker for interaction
+//             marker.propertyId = property.id;
+//             markers.addLayer(marker);
+            
+//             // Store marker reference by property ID
+//             markersByPropertyId[property.id] = marker;
+//         }
+//     });
+    
+//     // Add marker cluster group to map
+//     map.addLayer(markers);
+    
+//     // Fit map to bounds if there are markers
+//     if (markers.getLayers().length > 1) {
+//         map.fitBounds(markers.getBounds().pad(0.2));
+//     } else if (markers.getLayers().length === 1) {
+//         map.setView(markers.getLayers()[0].getLatLng(), 14);
+//     }
+    
+//     // Add click event to property cards to highlight marker on map
+//     document.querySelectorAll('.property-card').forEach(card => {
+//         card.addEventListener('click', function(e) {
+//             // Don't trigger if clicking on buttons or links
+//             if (e.target.tagName === 'A' || e.target.tagName === 'BUTTON' || 
+//                 e.target.closest('a') || e.target.closest('button')) {
+//                 return;
+//             }
+            
+//             const propertyId = this.dataset.propertyId;
+//             const marker = markersByPropertyId[propertyId];
+            
+//             if (marker) {
+//                 // Scroll to map if not in view
+//                 const mapElement = document.getElementById('property-map');
+//                 const mapRect = mapElement.getBoundingClientRect();
+                
+//                 if (mapRect.top < 0 || mapRect.bottom > window.innerHeight) {
+//                     mapElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+//                 }
+                
+//                 // Highlight marker
+//                 map.setView(marker.getLatLng(), 15);
+//                 marker.openPopup();
+//             }
+//         });
+//     });
+    
+//     // Update map counter
+//     document.getElementById('map-counter').textContent = `${properties.length} Properties Found`;
+// }
 function initializePropertyMap() {
     // Get property data from PHP
     const properties = @json($properties->items());
@@ -810,8 +939,8 @@ function initializePropertyMap() {
         return;
     }
     
-    // Initialize map centered on the first property or default to a central location
-    const defaultCoords = [16.615891, 120.320937]; // Default coordinates
+    // Initialize map centered on the first property or default to La Union coordinates
+    const defaultCoords = [16.615891, 120.320937]; // La Union
     let centerLat, centerLng;
     
     if (properties.length > 0 && properties[0].latitude && properties[0].longitude) {
@@ -821,7 +950,7 @@ function initializePropertyMap() {
         [centerLat, centerLng] = defaultCoords;
     }
     
-    const map = L.map('property-map').setView([centerLat, centerLng], 12);
+    const map = L.map('property-map').setView([centerLat, centerLng], 9); // Zoomed out further to show more area
     
     // Add OpenStreetMap tiles
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -829,17 +958,21 @@ function initializePropertyMap() {
         maxZoom: 19,
     }).addTo(map);
     
-    // Initialize marker cluster group
-    const markers = L.markerClusterGroup({
-        spiderfyOnMaxZoom: true,
-        showCoverageOnHover: true,
-        zoomToBoundsOnClick: true
-    });
-    
     // Store markers by property ID for later reference
     const markersByPropertyId = {};
+    const allMarkers = []; // To store all markers for fitting bounds
     
-    // Add markers for each property
+    // Create custom marker icon to make it more visible
+    const customIcon = L.icon({
+        iconUrl: 'https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/images/marker-icon.png',
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowUrl: 'https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/images/marker-shadow.png',
+        shadowSize: [41, 41]
+    });
+    
+    // Add individual markers for each property (no clustering)
     properties.forEach(property => {
         if (property.latitude && property.longitude) {
             // Create property image HTML
@@ -867,27 +1000,26 @@ function initializePropertyMap() {
                 </div>
             `;
             
-            // Create marker
-            const marker = L.marker([property.latitude, property.longitude])
-                .bindPopup(popupContent, { maxWidth: 300 });
+            // Create marker with custom icon
+            const marker = L.marker([property.latitude, property.longitude], {icon: customIcon})
+                .bindPopup(popupContent, { maxWidth: 300 })
+                .addTo(map); // Add directly to map, no clustering
             
             // Store property ID in marker for interaction
             marker.propertyId = property.id;
-            markers.addLayer(marker);
             
             // Store marker reference by property ID
             markersByPropertyId[property.id] = marker;
+            allMarkers.push(marker);
         }
     });
     
-    // Add marker cluster group to map
-    map.addLayer(markers);
-    
-    // Fit map to bounds if there are markers
-    if (markers.getLayers().length > 1) {
-        map.fitBounds(markers.getBounds().pad(0.2));
-    } else if (markers.getLayers().length === 1) {
-        map.setView(markers.getLayers()[0].getLatLng(), 14);
+    // Fit map bounds to show all markers with padding
+    if (allMarkers.length > 1) {
+        const group = new L.featureGroup(allMarkers);
+        map.fitBounds(group.getBounds().pad(0.5)); // Add more padding (0.5) to ensure all markers are visible
+    } else if (allMarkers.length === 1) {
+        map.setView(allMarkers[0].getLatLng(), 13);
     }
     
     // Add click event to property cards to highlight marker on map
@@ -914,6 +1046,12 @@ function initializePropertyMap() {
                 // Highlight marker
                 map.setView(marker.getLatLng(), 15);
                 marker.openPopup();
+                
+                // Add highlighting to active marker
+                Object.values(markersByPropertyId).forEach(m => {
+                    m._icon.classList.remove('active-marker-icon');
+                });
+                marker._icon.classList.add('active-marker-icon');
             }
         });
     });
@@ -921,7 +1059,6 @@ function initializePropertyMap() {
     // Update map counter
     document.getElementById('map-counter').textContent = `${properties.length} Properties Found`;
 }
-
 /**
  * Toggle between grid and list views
  */

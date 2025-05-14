@@ -47,16 +47,16 @@ Route::middleware(['auth:admin'])->group(function () {
 });
 
 
-Route::middleware(['guestwithalert:admin', 'guestwithalert:client', 'guestwithalert:agent'])->group(function () {
-    Route::get('/register', [AuthController::class, 'showRegister'])->name('show.register');
-    Route::get('/login', [AuthController::class, 'showLogin'])->name('show.login');
-    Route::post('/register', [AuthController::class, 'register'])->name('register');
-    Route::post('/login', [AuthController::class, 'login'])->name('login');
-    Route::get('/', [PagesController::class, 'Home'])->name('home');
-    Route::get('/listings', [PagesController::class, 'Listings'])->name('listings');
-    Route::get('/services', [PagesController::class, 'Services'])->name('services');
-    Route::get('/about', [PagesController::class, 'About'])->name('about');
-});
+// Route::middleware(['guestwithalert:admin', 'guestwithalert:client', 'guestwithalert:agent'])->group(function () {
+//     Route::get('/register', [AuthController::class, 'showRegister'])->name('show.register');
+//     Route::get('/login', [AuthController::class, 'showLogin'])->name('show.login');
+//     Route::post('/register', [AuthController::class, 'register'])->name('register');
+//     Route::post('/login', [AuthController::class, 'login'])->name('login');
+//     Route::get('/', [PagesController::class, 'Home'])->name('home');
+//     Route::get('/listings', [PagesController::class, 'Listings'])->name('listings');
+//     Route::get('/services', [PagesController::class, 'Services'])->name('services');
+//     Route::get('/about', [PagesController::class, 'About'])->name('about');
+// });
 
 
 // Agent views
@@ -73,10 +73,17 @@ Route::middleware(['auth:agent'])->group(function () {
 
     Route::get('/agentMessages', [AgentModuleController::class, 'agentMessages'])->name('agentMessages');
 
-    Route::get('/agentMessages/{property_id}/{client_id}', [AgentModuleController::class, 'viewConversation'])->name('agent.conversation');
+    Route::get('/agentMessages/{client_id}/{property_id?}', [AgentModuleController::class, 'viewConversation'])
+    ->where('property_id', '.*')
+    ->name('agent.conversation');
+    //  Route::get('/agentMessages/{client_id}', [AgentModuleController::class, 'viewConversation'])->name('agent.conversation');
+    
 
     Route::post('/agentMessages/send', [AgentModuleController::class, 'sendMessage'])->name('agent.sendMessage');
 
+
+    
+    
 
 
     Route::get('/agentProperties', [AgentModuleController::class, 'agentProperties'])->name('agentProperties');
@@ -116,16 +123,22 @@ Route::middleware(['auth:client'])->group(function () {
     // Route::get('/messages/{property_id}/{agent_id}', [ClientsModuleController::class, 'viewConversation'])->name('client.conversation');
     // Route::post('/messages/send', [ClientsModuleController::class, 'sendMessage'])->name('client.sendMessage');
     Route::get('/messages', [ClientsModuleController::class, 'messages'])->name('messages');
-    Route::get('/messages/{property_id}/{agent_id}', [ClientsModuleController::class, 'viewConversation'])->name('client.conversation');
-    Route::post('/messages/send', [ClientsModuleController::class, 'sendMessage'])->name('client.sendMessage');
- 
+    Route::get('/messages/{agent_id}/{property_id?}', [ClientsModuleController::class, 'viewConversation'])
+    ->where('property_id', '.*')
+    ->name('client.Conversation');
+    // Route::get('/messages/{agent_id}', [ClientsModuleController::class, 'viewConversation'])->name('client.Conversation');
 
+    Route::post('/messages/send', [ClientsModuleController::class, 'sendMessage'])->name('client.sendMessage');
+    Route::post('/client/contact-agent', [ClientsModuleController::class, 'contactAgent'])->name('client.contactAgent');
 
     Route::get('/myProperty', [ClientsModuleController::class, 'myProperty'])->name('myProperty');
     
     Route::get('/clientsViewProperties/{id}', [ClientsModuleController::class, 'clientsViewProperties'])->name('clientsViewProperties');
 
-        Route::post('/favoriteProperty/{propertyId}', [ClientsModuleController::class, 'favoriteProperty'])->name('favoriteProperty');
+    Route::post('/favoriteProperty/{propertyId}', [ClientsModuleController::class, 'favoriteProperty'])->name('favoriteProperty');
+
+    
+
 
  
     
